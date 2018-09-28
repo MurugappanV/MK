@@ -10,7 +10,8 @@ import React, {PureComponent} from 'react'
 import {StatusBar, View} from 'react-native'
 import {Navigator} from './src'
 
-export default class App extends PureComponent {
+type Props = {};
+export default class App extends PureComponent<Props> {
     render() {
         return <View>
             <StatusBar hidden={true} />

@@ -1,3 +1,4 @@
 export { Metrics } from "./Metrics";
-export { ScalePerctFullHeight, ScalePerctFullWidth, ScaleSampDesgHeight, ScaleSampDesgWidth} from "./Scale";
+export { ScaleMinSampleDesg, ScalePerctFullHeight, ScalePerctFullWidth, ScaleSampDesgHeight, ScaleSampDesgWidth} from "./Scale";
 export { Colors } from "./Values";
+export { Images } from "./Images";

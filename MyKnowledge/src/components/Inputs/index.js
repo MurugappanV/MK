@@ -1,0 +1,1 @@
+export {InputWthLogo} from './InputWthLogo'

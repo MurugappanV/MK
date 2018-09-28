@@ -1,0 +1,1 @@
+export {SmallText, LargeText, MediumText} from './Text'

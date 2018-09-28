@@ -6,8 +6,9 @@
  */
 
 import React from 'react'
-import { StyleSheet, Platform, ActivityIndicator, View, Text } from 'react-native'
+import { StyleSheet, ActivityIndicator, View } from 'react-native'
 import {Colors, Metrics, ScaleSampDesgHeight, ScaleSampDesgWidth} from '../../asset'
+import {LargeText} from '../Texts'
 
 type Props = {
     title: string,
@@ -21,7 +22,7 @@ const renderLoading = () => {
 
 export function Loading(props: Props) {
     return <View style={StyleSheet.flatten([styles.container, props.style])}>
-        <Text style={StyleSheet.flatten([styles.text, props.textStyle])}>{props.title}</Text>
+        <LargeText style={StyleSheet.flatten([styles.text, props.textStyle])} text={props.title}/>
         {renderLoading()}
     </View>
 }
@@ -45,10 +46,6 @@ const styles = StyleSheet.create({
         elevation: 20
     },
     text: {
-        textAlign: 'center',
-        color: Colors.bodyPrimaryDark,
-        fontSize: Metrics.LARGE_TEXT_SIZE,
-        fontFamily: Platform.OS === 'ios' ? 'Arial' : 'Roboto',
         paddingBottom: 20
     },
 })

@@ -1,0 +1,68 @@
+/**
+ * Common Button UIs
+ * Author : Murugappan V
+ * Date   : 9 Sep 2018
+ * @flow
+ */
+
+import React from 'react'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Colors} from '../../asset'
+import {SmallText} from '../Texts'
+
+type Props = {
+    onPress: Function,
+    style?: number | Object | Array<number>,
+    textStyle?: number | Object | Array<number>,
+    buttonTheme: string,
+    title: string
+}
+
+export function Button(props: Props) {
+    return <TouchableOpacity onPress={props.onPress} 
+        style={StyleSheet.flatten([styles.container, props.style, props.buttonTheme=='Dark' ? styles.contDark: styles.constLight])}>
+        <SmallText 
+            style={StyleSheet.flatten([styles.text, props.textStyle, props.buttonTheme=='Dark' ? styles.textLight: styles.textDark])} 
+            text={props.title}
+        />
+    </TouchableOpacity>
+}
+
+Button.defaultProps = {
+    style: undefined,
+    textStyle:undefined,
+    buttonTheme: 'Dark'
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center',
+        height: 40
+    },
+    text: {
+        fontWeight: 'bold'
+    },
+    contDark: {
+        backgroundColor: Colors.bgPrimaryDark
+    },
+    textDark: {
+        color: Colors.bodyPrimaryVarient,
+    },
+    constLight: {
+        backgroundColor: Colors.bgSecondaryLight,
+    },
+    textLight: {
+        color: Colors.bodyPrimaryLight,
+    }
+})
+
+//   onPress: Function,
+        // <TouchableHighlight
+        // onPress={props.onPress}
+        // style={StyleSheet.flatten([styles.container, props.style])}
+        // >
+        // <Text style={StyleSheet.flatten([styles.text, props.textStyle])}>{props.children}</Text>
+        // </TouchableHighlight>

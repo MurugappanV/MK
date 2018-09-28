@@ -26,5 +26,6 @@ export const Colors = {
     bodyPrimaryDark: BLACK,
     bodyPrimaryLight: WHITE,
     bodySecondaryDark: DARK_GREY,
-    bodySecondaryLight: GREY
+    bodySecondaryLight: GREY,
+    bodyPrimaryVarient: BRIGHT_BLUE
 }

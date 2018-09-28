@@ -11,6 +11,7 @@ const FULL_DEVICE_HEIGHT = Dimensions.get('window').height;
 const FULL_DEVICE_WIDTH = Dimensions.get('window').width;
 
 //text sizes
+const SMALL_TEXT_SIZE = 14
 const MEDIUM_TEXT_SIZE = 16
 const LARGE_TEXT_SIZE = 22
 const EXTRA_LARGE_TEXT_SIZE = 30
@@ -25,6 +26,7 @@ export const Metrics = {
     FULL_DEVICE_HEIGHT,
     FULL_DEVICE_WIDTH,
 
+    SMALL_TEXT_SIZE,
     MEDIUM_TEXT_SIZE,
     LARGE_TEXT_SIZE,
     EXTRA_LARGE_TEXT_SIZE,

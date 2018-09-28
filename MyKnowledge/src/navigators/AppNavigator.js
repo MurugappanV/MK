@@ -6,9 +6,10 @@
  */
 import React, { PureComponent } from 'react';
 import { createSwitchNavigator } from 'react-navigation';
-import { LoadingContainer } from '../containers'
+import { LoadingContainer, LoginContainer } from '../containers'
 
-export class AppNavigator extends PureComponent {
+type Props = {};
+export class AppNavigator extends PureComponent<Props> {
     render() {
         return <SwitchNavigator />;
     }
@@ -18,7 +19,7 @@ const SwitchNavigator = createSwitchNavigator(
     {
         AuthLoading: LoadingContainer,
         App: LoadingContainer,
-        Auth: LoadingContainer,
+        Auth: LoginContainer,
     },
     {
         initialRouteName: 'Auth',
