@@ -1,0 +1,1 @@
+export {Loading as LoadingComponent} from './Loading'

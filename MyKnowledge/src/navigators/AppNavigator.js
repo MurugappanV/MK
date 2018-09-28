@@ -1,7 +1,12 @@
+/**
+ * First Navigator , swicthes between login and home 
+ * Author : Murugappan V
+ * Date   : 9 Sep 2018
+ * @flow
+ */
 import React, { PureComponent } from 'react';
 import { createSwitchNavigator } from 'react-navigation';
-import {LoginContainer, HomeContainer, LoadingContainer} from '../containers'
-
+import { LoadingContainer } from '../containers'
 
 export class AppNavigator extends PureComponent {
     render() {
@@ -12,8 +17,8 @@ export class AppNavigator extends PureComponent {
 const SwitchNavigator = createSwitchNavigator(
     {
         AuthLoading: LoadingContainer,
-        App: HomeContainer,
-        Auth: LoginContainer,
+        App: LoadingContainer,
+        Auth: LoadingContainer,
     },
     {
         initialRouteName: 'Auth',

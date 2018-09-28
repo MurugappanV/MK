@@ -6,8 +6,18 @@
  * @flow
  */
 
-import React, {PureComponent} from 'react';
-import {StatusBar, View} from 'react-native';
+import React, {PureComponent} from 'react'
+import {StatusBar, View} from 'react-native'
+import {Navigator} from './src'
+
+export default class App extends PureComponent {
+    render() {
+        return <View>
+            <StatusBar hidden={true} />
+            <Navigator/>
+        </View>
+    }
+}
 
 // const instructions = Platform.select({
 //   ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
@@ -17,20 +27,12 @@ import {StatusBar, View} from 'react-native';
 // });
 
 // type Props = {};
-export default class App extends PureComponent {
-  render() {
-    return (
-      <View>
-      <StatusBar hidden={true} />
-      </View>
+
       // <View style={styles.container}>
       //   <Text style={styles.welcome}>Welcome to React Native!</Text>
       //   <Text style={styles.instructions}>To get started, edit App.js</Text>
       //   <Text style={styles.instructions}>{instructions}</Text>
       // </View>
-    );
-  }
-}
 
 // const styles = StyleSheet.create({
 //   container: {

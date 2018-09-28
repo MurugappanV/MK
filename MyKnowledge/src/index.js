@@ -1,0 +1,1 @@
+export {AppNavigator as Navigator} from './navigators'
