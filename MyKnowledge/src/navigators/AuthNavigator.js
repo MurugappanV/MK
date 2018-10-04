@@ -11,7 +11,7 @@ import {  LoginContainer, ForgotPassContainer } from '../containers'
 type Props = {};
 export class AuthNavigator extends PureComponent<Props> {
     render() {
-        return <Auth/>;
+        return <Auth screenProps={{ rootNavigation: this.props.navigation }}/>;
     }
 }
 

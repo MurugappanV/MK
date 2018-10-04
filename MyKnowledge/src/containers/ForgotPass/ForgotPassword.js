@@ -7,7 +7,7 @@
 import React, {PureComponent} from 'react';
 import { StyleSheet, View } from 'react-native'
 import { Colors, Metrics, Images, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
-import { Line, Footer, InputWthLogo, Button, MediumText, SmallText, LargeText, ExtraLargeText } from '../../components'
+import { Line, Footer, InputWthLogo, Button, MediumText, SmallText, LargeText, ExtraLargeText, StatusBarComp } from '../../components'
 
 type Props = {
     style?: number | Object | Array<number>
@@ -28,15 +28,15 @@ export class ForgotPassword extends PureComponent<Props> {
     }
 
     onCancel = () => {
-
+        this.props.navigation.goBack()
     }
 
-    renderEmail = (userName) => {
+    renderEmail = (email) => {
         return <InputWthLogo 
             style={styles.inputContainer}
             source={Images.logoImg} 
-            text={userName}
-            onChangeText={this.onUserNameChange}
+            text={email}
+            onChangeText={this.onEmailChange}
             placeHolder={"Email account"}
             textContentType={"emailAddress"}
             onSubmit={() => {this.state.passwordInRef.focus()}}
@@ -70,11 +70,12 @@ export class ForgotPassword extends PureComponent<Props> {
 
     render() {
         return <View style={styles.container}>
+            <StatusBarComp/>
             <ExtraLargeText style={styles.title} text={'Forgot Password?'}/>
             <MediumText style={styles.description} text={'A password reset link will be sent to the registered email for your account'}/>
             <View style={StyleSheet.flatten([styles.innerContainer, this.props.style])}>
                 <Line style={styles.line}/>
-                {this.renderEmail(this.state.userName)}
+                {this.renderEmail(this.state.email)}
                 <Line style={styles.line}/>
                 {this.renderButtons()}
             </View>

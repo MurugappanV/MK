@@ -7,7 +7,7 @@
 import React, {PureComponent} from 'react';
 import { StyleSheet, View } from 'react-native'
 import { Colors, Metrics, Images, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
-import { Line, Footer, ImageWthTitle, InputWthLogo, Button } from '../../components'
+import { Line, Footer, ImageWthTitle, InputWthLogo, Button, StatusBarComp } from '../../components'
 
 type Props = {
     style?: number | Object | Array<number>
@@ -28,11 +28,11 @@ export class LoginScreen extends PureComponent<Props> {
     }
 
     onLogin = () => {
-
+        this.props.screenProps.rootNavigation.navigate("Home")
     }
 
     onFrgtPassWrd = () => {
-        this.props.navigation.navigate("App")
+        this.props.navigation.navigate("ForgotPassword")
     }
 
     passwordInputRef = (ref) => {
@@ -98,6 +98,7 @@ export class LoginScreen extends PureComponent<Props> {
     render() {
         return <View style={styles.container}>
             <View style={StyleSheet.flatten([styles.innerContainer, this.props.style])}>
+                <StatusBarComp/>
                 <ImageWthTitle style={styles.logoContainer} title={"HP LFP Myknowledge"} source={Images.logoImg}/>
                 {this.renderUserName(this.state.userName)}
                 <Line style={styles.line}/>

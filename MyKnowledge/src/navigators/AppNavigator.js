@@ -8,6 +8,7 @@ import React, { PureComponent } from 'react';
 import { createSwitchNavigator } from 'react-navigation';
 import { LoadingContainer, LoginContainer } from '../containers'
 import { AuthNavigator } from './AuthNavigator'
+import { HomeNavigator } from './HomeNavigator';
 
 type Props = {};
 export class AppNavigator extends PureComponent<Props> {
@@ -19,7 +20,7 @@ export class AppNavigator extends PureComponent<Props> {
 const SwitchNavigator = createSwitchNavigator(
     {
         AuthLoading: LoadingContainer,
-        App: LoadingContainer,
+        Home: HomeNavigator,
         Auth: AuthNavigator,
     },
     {
