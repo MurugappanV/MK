@@ -13,10 +13,7 @@ import {Navigator} from './src'
 type Props = {};
 export default class App extends PureComponent<Props> {
     render() {
-        return <View>
-            <StatusBar hidden={true} />
-            <Navigator/>
-        </View>
+        return <Navigator/>
     }
 }
 

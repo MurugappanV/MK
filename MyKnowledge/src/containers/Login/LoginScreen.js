@@ -32,7 +32,7 @@ export class LoginScreen extends PureComponent<Props> {
     }
 
     onFrgtPassWrd = () => {
-
+        this.props.navigation.navigate("App")
     }
 
     passwordInputRef = (ref) => {
@@ -50,7 +50,9 @@ export class LoginScreen extends PureComponent<Props> {
             text={userName}
             onChangeText={this.onUserNameChange}
             placeHolder={"Username"}
+            textContentType={"username"}
             onSubmit={() => {this.state.passwordInRef.focus()}}
+            onRef={this.userNameInRef}
         />
     }
 
@@ -61,8 +63,10 @@ export class LoginScreen extends PureComponent<Props> {
             text={password}
             onChangeText={this.onPasswordChange}
             placeHolder={"Password"}
+            textContentType={"password"}
             returnKey={"done"}
             onSubmit={this.onLogin}
+            onRef={this.passwordInputRef}
         />
     }
 

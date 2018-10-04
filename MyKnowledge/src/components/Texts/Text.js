@@ -14,6 +14,10 @@ type Props = {
     style?: number | Object | Array<number>,
 }
 
+export function ExtraLargeText(props: Props) {
+    return <Text style={StyleSheet.flatten([styles.extralargeText, props.style])}>{props.text}</Text>
+}
+
 export function LargeText(props: Props) {
     return <Text style={StyleSheet.flatten([styles.largeText, props.style])}>{props.text}</Text>
 }
@@ -24,6 +28,11 @@ export function MediumText(props: Props) {
 
 export function SmallText(props: Props) {
     return <Text style={StyleSheet.flatten([styles.smallText, props.style])}>{props.text}</Text>
+}
+
+ExtraLargeText.defaultProps = {
+    style: undefined,
+    text: ""
 }
 
 LargeText.defaultProps = {
@@ -42,6 +51,12 @@ SmallText.defaultProps = {
 }
 
 const styles = StyleSheet.create({
+    extralargeText: {
+        textAlign: 'center',
+        color: Colors.bodyPrimaryDark,
+        fontSize: Metrics.EXTRA_LARGE_TEXT_SIZE,
+        fontFamily: Platform.OS === 'ios' ? 'Arial' : 'Roboto',
+    },
     largeText: {
         textAlign: 'center',
         color: Colors.bodyPrimaryDark,
