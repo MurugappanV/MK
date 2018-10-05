@@ -6,9 +6,10 @@
  */
 import React, { PureComponent } from 'react';
 import { createDrawerNavigator } from 'react-navigation';
-import {  LoginContainer, ForgotPassContainer } from '../containers'
+import {  LoginContainer, ForgotPassContainer, DefaultSettingsContainer } from '../containers'
 import { HomeDrawer } from './HomeDrawer';
 import { ScalePerctFullWidth } from '../asset';
+import { ChangePassword } from '../containers/ChangePassword';
 
 type Props = {};
 export class HomeNavigator extends PureComponent<Props> {
@@ -18,8 +19,11 @@ export class HomeNavigator extends PureComponent<Props> {
 }
 
 const Home = createDrawerNavigator({
-    Settings: {
-      screen: ForgotPassContainer,
+    DefaultSettings: {
+      screen: DefaultSettingsContainer,
+    },
+    ChangePassword: {
+      screen: ChangePassword,
     },
     All: {
       screen: LoginContainer,

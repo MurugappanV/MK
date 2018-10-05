@@ -14,9 +14,9 @@ const drawerData = [
   {
     title: 'Settings', 
     data: [
-      {routeName: 'All', title: 'Set Default Platform', img: Images.logoImg}, 
+      {routeName: 'DefaultSettings', title: 'Set Default Platform', img: Images.logoImg}, 
       {routeName: 'All', title: 'Notifications', img: Images.logoImg},
-      {routeName: 'All', title: 'Change Password', img: Images.logoImg},
+      {routeName: 'ChangePassword', title: 'Change Password', img: Images.logoImg},
       {routeName: 'All', title: 'Log out', img: Images.logoImg}
     ]
   },
