@@ -7,6 +7,8 @@
 import React, { PureComponent } from 'react';
 import { createDrawerNavigator } from 'react-navigation';
 import {  LoginContainer, ForgotPassContainer } from '../containers'
+import { HomeDrawer } from './HomeDrawer';
+import { ScalePerctFullWidth } from '../asset';
 
 type Props = {};
 export class HomeNavigator extends PureComponent<Props> {
@@ -20,6 +22,10 @@ const Home = createDrawerNavigator({
       screen: ForgotPassContainer,
     },
     All: {
-      screen: ForgotPassContainer,
-    },
-  });
+      screen: LoginContainer,
+    }
+  }, {
+    contentComponent: HomeDrawer,
+    drawerWidth: ScalePerctFullWidth(85)
+  }
+);
