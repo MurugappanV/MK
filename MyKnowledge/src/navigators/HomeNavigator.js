@@ -6,28 +6,34 @@
  */
 import React, { PureComponent } from 'react';
 import { createDrawerNavigator } from 'react-navigation';
-import {  LoginContainer, ForgotPassContainer, DefaultSettingsContainer } from '../containers'
+import {  LoginContainer, 
+	ChangePasswordConatiner, 
+	NotifySettingsContainer, 
+	DefaultSettingsContainer } from '../containers'
 import { HomeDrawer } from './HomeDrawer';
 import { ScalePerctFullWidth } from '../asset';
-import { ChangePassword } from '../containers/ChangePassword';
 
 type Props = {};
 export class HomeNavigator extends PureComponent<Props> {
     render() {
-        return <Home/>;
+        return <Home screenProps={{ rootNavigation: this.props.navigation }}/>;
     }
 }
 
 const Home = createDrawerNavigator({
+    All: {
+		screen: LoginContainer,
+    },  
     DefaultSettings: {
-      screen: DefaultSettingsContainer,
+		screen: DefaultSettingsContainer,
     },
     ChangePassword: {
-      screen: ChangePassword,
+		screen: ChangePasswordConatiner,
     },
-    All: {
-      screen: LoginContainer,
-    }
+    NotificationSettings: {
+		screen: NotifySettingsContainer
+    },
+    
   }, {
     contentComponent: HomeDrawer,
     drawerWidth: ScalePerctFullWidth(85)

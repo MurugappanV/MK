@@ -7,7 +7,7 @@
 import React, {PureComponent} from 'react';
 import {NavigationActions} from 'react-navigation';
 import { Colors, Images, ScalePerctFullHeight, ScalePerctFullWidth} from '../asset'
-import {StyleSheet, SectionList, View} from 'react-native';
+import {StyleSheet, SectionList, Linking, View} from 'react-native';
 import { MediumText, Line, LogoTextBtn } from '../components';
 
 const drawerData = [
@@ -15,9 +15,9 @@ const drawerData = [
     title: 'Settings', 
     data: [
       {routeName: 'DefaultSettings', title: 'Set Default Platform', img: Images.logoImg}, 
-      {routeName: 'All', title: 'Notifications', img: Images.logoImg},
+      {routeName: 'NotificationSettings', title: 'Notifications', img: Images.logoImg},
       {routeName: 'ChangePassword', title: 'Change Password', img: Images.logoImg},
-      {routeName: 'All', title: 'Log out', img: Images.logoImg}
+      {routeName: 'LogOut', title: 'Log out', img: Images.logoImg}
     ]
   },
   {
@@ -34,8 +34,8 @@ const drawerData = [
   {
     title: 'Contact Us', 
     data: [
-      {routeName: 'All', title: 'Feedback', img: Images.logoImg}, 
-      {routeName: 'All', title: 'Help', img: Images.logoImg}
+      {routeName: 'Feedback', title: 'Feedback', img: Images.logoImg}, 
+      {routeName: 'Help', title: 'Help', img: Images.logoImg}
     ]
   }
 ]
@@ -46,11 +46,28 @@ type Props = {
 
 export class HomeDrawer extends PureComponent<Props> {
     navigateToScreen = (route) => () => {
-        const navigateAction = NavigationActions.navigate({
-            routeName: route
-        });
-        this.props.navigation.dispatch(navigateAction);
-        this.props.navigation.toggleDrawer();
+        switch(route) {
+            case "LogOut": {
+                this.props.screenProps.rootNavigation.navigate("Auth")
+                break;
+            }
+            case "Feedback": {
+                Linking.openURL('mailto:lfpmyknowledgeapp@hp.com?subject=Feedback by user')
+                break;
+            }
+            case "Help": {
+                Linking.openURL('mailto:lfpmyknowledgeapp@hp.com?subject=Support request by user')
+                break;
+            }
+            default: {
+                const navigateAction = NavigationActions.navigate({
+                    routeName: route
+                });
+                this.props.navigation.dispatch(navigateAction);
+                this.props.navigation.toggleDrawer();
+            }
+        }
+        
     }
 
     renderHeader = (title) => {

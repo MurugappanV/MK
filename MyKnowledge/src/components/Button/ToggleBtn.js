@@ -27,7 +27,7 @@ export class ToggleBtn extends PureComponent<Props> {
     onPress = () => {
         this.setState({on: !this.state.on})
         this.toggle(!this.state.on)
-        this.props.onPress()
+        this.props.onPress(!this.state.on)
     }
 
     toggle = (on) => {
@@ -48,18 +48,18 @@ export class ToggleBtn extends PureComponent<Props> {
         const toggleItemWidth = width / 2;
         const x = this.animValue.interpolate({
             inputRange: [0, 1],
-            outputRange: [-50, 0]
+            outputRange: [-toggleItemWidth, 0]
         })
-        return <TouchableOpacity onPress={this.onPress} style={StyleSheet.flatten([{width: width}, style, {overflow: 'hidden'}])}>
+        return <TouchableOpacity onPress={this.onPress} style={StyleSheet.flatten([{width: width}, styles.touchContainer, style])}>
             <Animated.View style={[styles.container, {transform: [{translateX: x}]}]}>
-                <View style={[styles.innerContainer, {textAlign: 'center', height: height, width: toggleItemWidth, backgroundColor: Colors.bgPrimaryDark}]}>
-                    <MediumText text={"ON"}/>
+                <View style={[styles.innerContainer, styles.onContainer, {height: height, width: toggleItemWidth}]}>
+                    <MediumText style={{color: Colors.bodyPrimaryLight}} text={"ON"}/>
                 </View>
-                <View style={[styles.innerContainer, {textAlign: 'center', height: height, width: toggleItemWidth, backgroundColor: Colors.bgPrimaryLight}]}>
+                <View style={[styles.innerContainer, styles.emptyContainer, {height: height, width: toggleItemWidth}]}>
                     <MediumText text={""}/>
                 </View>
-                <View style={[styles.innerContainer, {textAlign: 'center', height: height, width: toggleItemWidth, backgroundColor: Colors.bgSecondaryLight}]}>
-                    <MediumText text={"OFF"}/>
+                <View style={[styles.innerContainer, styles.offContainer, {height: height, width: toggleItemWidth}]}>
+                    <MediumText style={{color: Colors.bodyPrimaryDark}} text={"OFF"}/>
                 </View>
             </Animated.View>
         </TouchableOpacity>
@@ -71,6 +71,12 @@ ToggleBtn.defaultProps = {
 }
 
 const styles = StyleSheet.create({
+    touchContainer: {
+        overflow: 'hidden',
+        borderRadius: 5,
+        borderWidth: 0.5,
+        borderColor: Colors.bgSecondaryDark
+    },
     container: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -81,5 +87,20 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         alignContent: 'center',
+    },
+    onContainer: {
+        textAlign: 'center',
+        backgroundColor: Colors.bgPrimaryDark,
+        borderTopLeftRadius: 5,
+        borderBottomLeftRadius: 5
+    },
+    offContainer: {
+        textAlign: 'center',
+        backgroundColor: Colors.bgSecondaryLight,
+        borderTopRightRadius: 5,
+        borderBottomRightRadius: 5
+    },
+    emptyContainer: {
+        backgroundColor: Colors.bgPrimaryLight
     }
 })
