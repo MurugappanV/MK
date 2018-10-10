@@ -1,0 +1,83 @@
+/**
+ * Search Input
+ * Author : Murugappan V
+ * Date   : 10 Oct 2018
+ * @flow
+ */
+
+import React from 'react'
+import { StyleSheet, View, Image, TextInput } from 'react-native'
+import { Colors, Metrics, Images, ScalePerctFullWidth } from '../../asset'
+import { ImageBtn } from '../Button';
+import { Line } from '../Common';
+
+type Props = {
+    onChangeText: Function,
+    onSubmit: Function,
+    onClose: Function,
+    placeHolder?: string,
+    textContentType?: string,
+    style?: number | Object | Array<number>,
+    imageStyle?: number | Object | Array<number>,
+    inputStyle?: number | Object | Array<number>,
+    text: string,
+    returnKey?: string
+}
+
+export function SearchInput(props: Props) {
+    return <View>
+        <View style={StyleSheet.flatten([styles.container, props.style])}>
+            <Image style={StyleSheet.flatten([styles.image, props.imageStyle])} source={Images.logoImg}/>
+            <TextInput
+                style={StyleSheet.flatten([styles.input, props.inputStyle])} 
+                onChangeText={(text) => props.onChangeText(text)}
+                underlineColorAndroid="transparent"
+                selectionColor='black'
+                returnKeyType={props.returnKey}
+                placeholder={props.placeHolder}
+                textContentType={props.textContentType}
+                secureTextEntry={props.textContentType=='password'? true:false}
+                placeholderTextColor={Colors.bodySecondaryLight}
+                value={props.text}
+                onSubmitEditing={props.onSubmit}
+                autoFocus={true}
+            />
+            <ImageBtn onPress={props.onClose} style={styles.image} imgStyle={styles.image} source={Images.logoImg}/>
+        </View>
+        <Line style={styles.line}/>
+    </View>
+}
+
+SearchInput.defaultProps = {
+    style: undefined,
+    imageStyle: undefined,
+    inputStyle:undefined,
+    placeHolder: undefined,
+    textContentType: 'none',
+    returnKey: 'next'
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center'
+    },
+    image: {
+        width: 20,
+        height: 20,
+        resizeMode: 'contain',
+        flex: 2
+    },
+    input: {
+        fontSize: Metrics.MEDIUM_TEXT_SIZE,
+        flex: 8
+    },
+    line: {
+        borderBottomColor: Colors.bodyPrimaryVarient,
+        borderBottomWidth: 1,
+        width: ScalePerctFullWidth(90),
+        alignSelf: 'center'
+    }
+})

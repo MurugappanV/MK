@@ -107,7 +107,7 @@ export class NotificationSettings extends PureComponent<Props> {
     render() {
         return <View style={styles.container}>
             <StatusBarComp/>
-            <Header/>
+            <Header navigation={this.props.navigation}/>
             
             <SectionList
                 style={StyleSheet.flatten([styles.container, this.props.style])}

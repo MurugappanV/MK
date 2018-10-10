@@ -7,9 +7,8 @@
 import React, {PureComponent} from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native'
 import { Colors, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
-import { Line, Footer, Button, StatusBarComp, ExtraLargeText, MediumText, SmallText } from '../../components'
+import { Line, Footer, Button, StatusBarComp, ExtraLargeText, SmallText, RadioGroup } from '../../components'
 import { Header } from '../Header';
-import RadioGroup from '../../components/Inputs/RadioGroup';
 
 const platformList = [
     {
@@ -125,7 +124,7 @@ export class DefaultSettings extends PureComponent<Props> {
     render() {
         return <View style={styles.container}>
             <StatusBarComp/>
-            <Header/>
+            <Header navigation={this.props.navigation}/>
             <ScrollView style={StyleSheet.flatten([styles.innerContainer, this.props.style])}>
                 <ExtraLargeText style={styles.title} text={'Set default platform'}/>
                 <SmallText style={styles.description} text={'Select your default platform for the landing page'}/>

@@ -96,7 +96,7 @@ export class ChangePassword extends PureComponent<Props> {
     render() {
         return <View style={styles.container}>
             <StatusBarComp/>
-            <Header/>
+            <Header navigation={this.props.navigation}/>
             <ExtraLargeText style={styles.title} text={'Change Password'}/>
             <MediumText style={styles.description} text={'Enter your new password'}/>
             <View style={StyleSheet.flatten([styles.innerContainer, this.props.style])}>

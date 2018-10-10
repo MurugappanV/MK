@@ -7,13 +7,13 @@
 import React, {PureComponent} from 'react';
 import { StyleSheet, View, Image } from 'react-native'
 import {Colors, ScalePerctFullWidth, Images, ScaleSampDesgHeight} from '../../asset'
-import { LargeText } from '../../components';
+import { LargeText, ImageBtn } from '../../components';
 
 type Props = {
     title: string,
     style?: number | Object | Array<number>,
-    isSearch: boolean,
-    isFilter: boolean
+    onSearchSelected: Function,
+    onFilterSelected: Function
 }
 
 export class Header extends PureComponent<Props> {
@@ -24,10 +24,11 @@ export class Header extends PureComponent<Props> {
 
     render() {
         return <View style={StyleSheet.flatten([styles.container, this.props.style])}>
-            <Image style={styles.menuImage} source={Images.logoImg}/>
+            <ImageBtn style={styles.menuImage} imgStyle={styles.menuImage} source={Images.logoImg} onPress={this.props.navigation.toggleDrawer}/>
+            {/* <Image style={styles.menuImage} source={Images.logoImg}/> */}
             <LargeText style={styles.title} text={this.props.title}/>
-            {this.props.isSearch && <Image style={styles.menuImage} source={Images.logoImg}/>}
-            {this.props.isFilter && <Image style={styles.menuImage} source={Images.logoImg}/>}
+            {this.props.onSearchSelected && <ImageBtn style={styles.menuImage} imgStyle={styles.menuImage} source={Images.logoImg} onPress={this.props.onSearchSelected}/>}
+            {this.props.onFilterSelected && <ImageBtn style={styles.filterImage} imgStyle={styles.menuImage} source={Images.logoImg} onPress={this.props.onFilterSelected}/>}
         </View>
     } 
 }
@@ -35,8 +36,8 @@ export class Header extends PureComponent<Props> {
 Header.defaultProps = {
     style: undefined,
     title: 'HP MyKnowledge',
-    isSearch: false,
-    isFilter: false
+    onSearchSelected: undefined,
+    onFilterSelected: undefined
 }
 
 const styles = StyleSheet.create({
@@ -51,8 +52,12 @@ const styles = StyleSheet.create({
     },
     menuImage: {
         width: 30,
+        height: 30
+    },
+    filterImage: {
+        width: 30,
         height: 30,
-        resizeMode: 'contain'
+        marginLeft: 20
     },
     title: {
         color: Colors.bodyPrimaryLight,

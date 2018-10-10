@@ -4,7 +4,7 @@ import { Colors, ScalePerctFullWidth } from '../../asset';
 import { MediumText } from '../Texts';
 import { Line } from '../Common';
 
-export default class RadioGroup extends Component {
+export class RadioGroup extends Component {
     constructor(props) {
         super(props);
         this.state = {

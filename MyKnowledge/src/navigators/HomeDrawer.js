@@ -23,12 +23,12 @@ const drawerData = [
   {
     title: 'Document Types', 
     data: [
-      {routeName: 'All', title: 'All', img: Images.logoImg}, 
-      {routeName: 'All', title: 'Newsletters', img: Images.logoImg},
-      {routeName: 'All', title: 'Service Documents', img: Images.logoImg},
-      {routeName: 'All', title: 'Videos', img: Images.logoImg},
-      {routeName: 'All', title: 'Trainings', img: Images.logoImg},
-      {routeName: 'All', title: 'Communications', img: Images.logoImg}
+      {routeName: 'DocumentList', title: 'All', img: Images.logoImg}, 
+      {routeName: 'DocumentList', title: 'Newsletters', img: Images.logoImg},
+      {routeName: 'DocumentList', title: 'Service Documents', img: Images.logoImg},
+      {routeName: 'DocumentList', title: 'Videos', img: Images.logoImg},
+      {routeName: 'DocumentList', title: 'Trainings', img: Images.logoImg},
+      {routeName: 'DocumentList', title: 'Communications', img: Images.logoImg}
     ]
   },
   {
