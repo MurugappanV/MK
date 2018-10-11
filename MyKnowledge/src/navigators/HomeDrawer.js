@@ -14,28 +14,28 @@ const drawerData = [
   {
     title: 'Settings', 
     data: [
-      {routeName: 'DefaultSettings', title: 'Set Default Platform', img: Images.logoImg}, 
-      {routeName: 'NotificationSettings', title: 'Notifications', img: Images.logoImg},
-      {routeName: 'ChangePassword', title: 'Change Password', img: Images.logoImg},
-      {routeName: 'LogOut', title: 'Log out', img: Images.logoImg}
+      {routeName: 'DefaultSettings', title: 'Set Default Platform', img: Images.editImg}, 
+      {routeName: 'NotificationSettings', title: 'Notifications', img: Images.notifyImg},
+      {routeName: 'ChangePassword', title: 'Change Password', img: Images.unlockImg},
+      {routeName: 'LogOut', title: 'Log out', img: Images.logoutImg}
     ]
   },
   {
     title: 'Document Types', 
     data: [
-      {routeName: 'DocumentList', title: 'All', img: Images.logoImg}, 
-      {routeName: 'DocumentList', title: 'Newsletters', img: Images.logoImg},
-      {routeName: 'DocumentList', title: 'Service Documents', img: Images.logoImg},
-      {routeName: 'DocumentList', title: 'Videos', img: Images.logoImg},
-      {routeName: 'DocumentList', title: 'Trainings', img: Images.logoImg},
-      {routeName: 'DocumentList', title: 'Communications', img: Images.logoImg}
+      {routeName: 'DocumentList', title: 'All', img: Images.allImg}, 
+      {routeName: 'DocumentList', title: 'Newsletters', img: Images.fileImg},
+      {routeName: 'DocumentList', title: 'Service Documents', img: Images.bookImg},
+      {routeName: 'DocumentList', title: 'Videos', img: Images.videoImg},
+      {routeName: 'DocumentList', title: 'Trainings', img: Images.trainingImg},
+      {routeName: 'DocumentList', title: 'Communications', img: Images.bellImg}
     ]
   },
   {
     title: 'Contact Us', 
     data: [
-      {routeName: 'Feedback', title: 'Feedback', img: Images.logoImg}, 
-      {routeName: 'Help', title: 'Help', img: Images.logoImg}
+      {routeName: 'Feedback', title: 'Feedback', img: Images.chatImg}, 
+      {routeName: 'Help', title: 'Help', img: Images.userBlackImg}
     ]
   }
 ]
@@ -82,6 +82,7 @@ export class HomeDrawer extends PureComponent<Props> {
             {index != 0 && <Line style={styles.itemLine}/>}
             <LogoTextBtn
               style={styles.item}
+              imageStyle={styles.iconStyle}
               onPress={this.navigateToScreen(item.routeName)} 
               text={item.title} 
               source={item.img}/>
@@ -142,6 +143,10 @@ const styles = StyleSheet.create({
         width: ScalePerctFullWidth(47),
         marginLeft: ScalePerctFullWidth(27)
     },
+    iconStyle: {
+        width: 15,
+        height: 15
+    }
 })
 
 // <View style={styles.container}>

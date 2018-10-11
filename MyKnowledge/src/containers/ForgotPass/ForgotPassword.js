@@ -34,7 +34,7 @@ export class ForgotPassword extends PureComponent<Props> {
     renderEmail = (email) => {
         return <InputWthLogo 
             style={styles.inputContainer}
-            source={Images.logoImg} 
+            source={Images.emailImg} 
             text={email}
             onChangeText={this.onEmailChange}
             placeHolder={"Email account"}

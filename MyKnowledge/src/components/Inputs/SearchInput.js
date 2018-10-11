@@ -27,7 +27,7 @@ type Props = {
 export function SearchInput(props: Props) {
     return <View>
         <View style={StyleSheet.flatten([styles.container, props.style])}>
-            <Image style={StyleSheet.flatten([styles.image, props.imageStyle])} source={Images.logoImg}/>
+            <Image tintColor={Colors.bodyPrimaryVarient} style={StyleSheet.flatten([styles.image, props.imageStyle])} source={Images.searchImg}/>
             <TextInput
                 style={StyleSheet.flatten([styles.input, props.inputStyle])} 
                 onChangeText={(text) => props.onChangeText(text)}
@@ -42,7 +42,7 @@ export function SearchInput(props: Props) {
                 onSubmitEditing={props.onSubmit}
                 autoFocus={true}
             />
-            <ImageBtn onPress={props.onClose} style={styles.image} imgStyle={styles.image} source={Images.logoImg}/>
+            <ImageBtn tintColor={Colors.bodyPrimaryVarient} onPress={props.onClose} style={styles.close} imgStyle={styles.closeImage} source={Images.closeImg}/>
         </View>
         <Line style={styles.line}/>
     </View>
@@ -69,6 +69,14 @@ const styles = StyleSheet.create({
         height: 20,
         resizeMode: 'contain',
         flex: 2
+    },
+    close: {
+        flex: 2
+    },
+    closeImage: {
+        width: 16,
+        height: 16,
+        resizeMode: 'contain'
     },
     input: {
         fontSize: Metrics.MEDIUM_TEXT_SIZE,

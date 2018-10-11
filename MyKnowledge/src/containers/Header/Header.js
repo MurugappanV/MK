@@ -24,11 +24,11 @@ export class Header extends PureComponent<Props> {
 
     render() {
         return <View style={StyleSheet.flatten([styles.container, this.props.style])}>
-            <ImageBtn style={styles.menuImage} imgStyle={styles.menuImage} source={Images.logoImg} onPress={this.props.navigation.toggleDrawer}/>
+            <ImageBtn style={styles.menuImage} imgStyle={styles.menuImage} source={Images.menuImg} onPress={this.props.navigation.toggleDrawer}/>
             {/* <Image style={styles.menuImage} source={Images.logoImg}/> */}
             <LargeText style={styles.title} text={this.props.title}/>
-            {this.props.onSearchSelected && <ImageBtn style={styles.menuImage} imgStyle={styles.menuImage} source={Images.logoImg} onPress={this.props.onSearchSelected}/>}
-            {this.props.onFilterSelected && <ImageBtn style={styles.filterImage} imgStyle={styles.menuImage} source={Images.logoImg} onPress={this.props.onFilterSelected}/>}
+            {this.props.onSearchSelected && <ImageBtn style={styles.menuImage} imgStyle={styles.menuImage} source={Images.searchImg} onPress={this.props.onSearchSelected}/>}
+            {this.props.onFilterSelected && <ImageBtn style={styles.filter} imgStyle={styles.filterImage} source={Images.filterImg} onPress={this.props.onFilterSelected}/>}
         </View>
     } 
 }
@@ -51,12 +51,14 @@ const styles = StyleSheet.create({
         padding: 20
     },
     menuImage: {
-        width: 30,
-        height: 30
+        width: 20,
+        height: 20
     },
     filterImage: {
-        width: 30,
-        height: 30,
+        width: 17,
+        height: 17
+    },
+    filter: {
         marginLeft: 20
     },
     title: {

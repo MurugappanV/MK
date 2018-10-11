@@ -46,7 +46,7 @@ export class LoginScreen extends PureComponent<Props> {
     renderUserName = (userName) => {
         return <InputWthLogo 
             style={styles.inputContainer}
-            source={Images.logoImg} 
+            source={Images.userImg} 
             text={userName}
             onChangeText={this.onUserNameChange}
             placeHolder={"Username"}
@@ -59,7 +59,7 @@ export class LoginScreen extends PureComponent<Props> {
     renderPassword = (password) => {
         return <InputWthLogo 
             style={styles.inputContainer}
-            source={Images.logoImg} 
+            source={Images.lockImg} 
             text={password}
             onChangeText={this.onPasswordChange}
             placeHolder={"Password"}

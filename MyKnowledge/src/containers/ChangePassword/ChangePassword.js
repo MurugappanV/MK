@@ -47,7 +47,7 @@ export class ChangePassword extends PureComponent<Props> {
     renderPassword = (password) => {
         return <InputWthLogo 
             style={styles.inputContainer}
-            source={Images.logoImg} 
+            source={Images.lockImg} 
             text={password}
             onChangeText={this.onPasswordChange}
             placeHolder={"Password"}
@@ -59,7 +59,7 @@ export class ChangePassword extends PureComponent<Props> {
     renderConfirmPassword = (password) => {
         return <InputWthLogo 
             style={styles.inputContainer}
-            source={Images.logoImg} 
+            source={Images.lockImg} 
             text={password}
             onChangeText={this.onConfirmPasswordChange}
             placeHolder={"Confirm password"}

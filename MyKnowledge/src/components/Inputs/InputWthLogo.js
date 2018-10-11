@@ -25,7 +25,7 @@ type Props = {
 
 export function InputWthLogo(props: Props) {
     return <View style={StyleSheet.flatten([styles.container, props.style])}>
-        <Image style={StyleSheet.flatten([styles.image, props.imageStyle])} source={props.source}/>
+        <Image tintColor={Colors.bodySecondaryDark} style={StyleSheet.flatten([styles.image, props.imageStyle])} source={props.source}/>
         <TextInput 
             ref={refs => !!props.onRef && props.onRef(refs)}
             style={StyleSheet.flatten([styles.input, props.inputStyle])} 

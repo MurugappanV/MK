@@ -14,18 +14,20 @@ type Props = {
     onPress: Function,
     style?: number | Object | Array<number>,
     imgStyle?: number | Object | Array<number>,
-    source: any
+    source: any,
+    tintColor: string
 }
 
 export function ImageBtn(props: Props) {
     return <TouchableOpacity onPress={props.onPress} style={StyleSheet.flatten([styles.container, props.style])}>
-        <Image style={StyleSheet.flatten([styles.imgStyle, props.imgStyle])} source={props.source ? props.source : Images.logoImg}/>
+        <Image tintColor={props.tintColor} style={StyleSheet.flatten([styles.imgStyle, props.imgStyle])} source={props.source ? props.source : Images.logoImg}/>
     </TouchableOpacity>
 }
 
 ImageBtn.defaultProps = {
     style: undefined,
     imgStyle:undefined,
+    tintColor: Colors.bodyPrimaryLight
 }
 
 const styles = StyleSheet.create({
