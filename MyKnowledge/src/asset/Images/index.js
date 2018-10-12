@@ -27,4 +27,6 @@ export const Images = {
     menuImg: require("./menu.png"),
     allImg: require("./all.png"),
     closeImg: require("./close.png"),
+    checkSelectImg: require("./icon-checkbox-checked.png"),
+    checkBoxImg: require("./icon-checkbox.png"),
 };

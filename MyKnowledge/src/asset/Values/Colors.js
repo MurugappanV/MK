@@ -13,6 +13,7 @@ const BRIGHT_BLUE = "#0096D6"
 const GREY = "#A6A6A6"
 const LIGHT_GREY = "#E5E8E8"
 const DARK_GREY = "#757575"
+const ORANGE = "#e02424"
 
 
 export const Colors = {
@@ -22,6 +23,7 @@ export const Colors = {
     bgSecondaryLight: LIGHT_GREY,
     bgTransparent: TRANSPARENT,
     bgSemiTransparent: BLACK20perc,
+    bgVarient: ORANGE,
 
     bodyPrimaryDark: BLACK,
     bodyPrimaryLight: WHITE,

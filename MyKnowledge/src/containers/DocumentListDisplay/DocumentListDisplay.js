@@ -51,6 +51,10 @@ export class DocumentListDisplay extends PureComponent<Props> {
         this.setState({seachKey: text})
     }
 
+    onFilterOpen = () => {
+        this.props.navigation.navigate("Filter")
+    }
+
     renderItem = (item) => {
         return <TouchableOpacity onPress={this.onItemSelect} style={styles.documentContainer}>
             <View style={styles.itemRow1}>
@@ -71,17 +75,14 @@ export class DocumentListDisplay extends PureComponent<Props> {
         return <View style={styles.listHeader}/>
     }
 
-    // renderFooter = () => {
-    //     return <Line style={styles.line}/>
-    // }
-
     render() {
         return <View style={styles.container}>
             <StatusBarComp/>
             <Header 
                 navigation={this.props.screenProps.rootNavigation} 
                 onSearchSelected={this.onSearchOpen}
-                onFilterSelected={this.onSearchOpen}/>
+                onFilterSelected={this.onFilterOpen}
+            />
             {this.state.searchSelected && 
                 <SearchInput 
                     placeHolder={'Search'} 

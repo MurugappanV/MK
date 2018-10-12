@@ -20,9 +20,9 @@ type Props = {
 
 export function Button(props: Props) {
     return <TouchableOpacity onPress={props.onPress} 
-        style={StyleSheet.flatten([styles.container, props.style, props.buttonTheme=='Dark' ? styles.contDark: styles.constLight])}>
+        style={StyleSheet.flatten([styles.container, props.style, props.buttonTheme=='Dark' ? styles.contDark: props.buttonTheme=='Varient' ? styles.constVarient: styles.constLight])}>
         <SmallText 
-            style={StyleSheet.flatten([styles.text, props.textStyle, props.buttonTheme=='Dark' ? styles.textLight: styles.textDark])} 
+            style={StyleSheet.flatten([styles.text, props.textStyle, props.buttonTheme=='Dark' ? styles.textLight: props.buttonTheme=='Varient' ? styles.textLight: styles.textDark])} 
             text={props.title}
         />
     </TouchableOpacity>
@@ -54,6 +54,9 @@ const styles = StyleSheet.create({
     constLight: {
         backgroundColor: Colors.bgSecondaryLight,
     },
+    constVarient: {
+        backgroundColor: Colors.bgVarient,
+    }, 
     textLight: {
         color: Colors.bodyPrimaryLight,
     }

@@ -6,7 +6,7 @@
  */
 import React, { PureComponent } from 'react';
 import { createStackNavigator } from 'react-navigation';
-import {  DocumentListContainer, DocumentDisplayContainer } from '../containers'
+import {  DocumentListContainer, DocumentDisplayContainer, FilterContainer } from '../containers'
 
 type Props = {};
 export class DocumentNavigator extends PureComponent<Props> {
@@ -18,7 +18,8 @@ export class DocumentNavigator extends PureComponent<Props> {
 const Stack = createStackNavigator(
     {
         List: {screen:DocumentListContainer},
-        Details: {screen:DocumentDisplayContainer}
+        Details: {screen:DocumentDisplayContainer},
+        Filter: {screen:FilterContainer}
     },
     {
         navigationOptions: () => ({
