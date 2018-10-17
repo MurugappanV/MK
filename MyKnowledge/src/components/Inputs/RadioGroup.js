@@ -9,7 +9,6 @@ export class RadioGroup extends Component {
         super(props);
         this.state = {
             radioButtons: this.validate(this.props.data),
-            selectedValue: this.props.value ? this.props.value : this.props.data[0].value
         };
     }
 
@@ -22,7 +21,6 @@ export class RadioGroup extends Component {
     }
 
     onPress = value => {
-        this.setState({selectedValue: value})
         this.props.onPress(value)
     };
 
@@ -36,7 +34,7 @@ export class RadioGroup extends Component {
                             data={data}
                             color={this.props.color}
                             size={this.props.size}
-                            selectedValue={this.state.selectedValue}
+                            selectedValue={this.props.value}
                             onPress={this.onPress}
                         />
                     ))}

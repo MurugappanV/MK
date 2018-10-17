@@ -8,7 +8,9 @@ import React, { PureComponent } from 'react';
 import { createStackNavigator } from 'react-navigation';
 import {  DocumentListContainer, DocumentDisplayContainer, FilterContainer } from '../containers'
 
-type Props = {};
+type Props = {
+    navigation: any
+};
 export class DocumentNavigator extends PureComponent<Props> {
     render() {
         return <Stack screenProps={{ rootNavigation: this.props.navigation }}/>;

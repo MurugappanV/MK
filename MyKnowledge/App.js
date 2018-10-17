@@ -7,13 +7,16 @@
  */
 
 import React, {PureComponent} from 'react'
-import {StatusBar, View} from 'react-native'
+import { Provider } from 'react-redux'
 import {Navigator} from './src'
+import { Store } from './src';
 
 type Props = {};
 export default class App extends PureComponent<Props> {
     render() {
-        return <Navigator/>
+        return <Provider store={Store}>
+            <Navigator/>
+        </Provider>
     }
 }
 

@@ -1,1 +1,1 @@
-export {DefaultSettings} from './DefaultSettings'
+export {default as DefaultSettings} from './DefaultSettings'

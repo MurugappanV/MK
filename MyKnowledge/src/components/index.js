@@ -1,5 +1,5 @@
 export {Loading as LoadingComponent} from './Loading'
 export {InputWthLogo, RadioGroup, SearchInput, SelectMultiple} from './Inputs'
-export {Footer, Line, ImageWthTitle, StatusBarComp} from './Common'
+export {Footer, Line, ImageWthTitle, StatusBarComp, AlertComp} from './Common'
 export {Button, LogoTextBtn, ToggleBtn, ImageBtn} from './Button'
 export {MediumText, SmallText, LargeText, ExtraLargeText} from './Texts'

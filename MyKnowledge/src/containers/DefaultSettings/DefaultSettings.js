@@ -5,86 +5,36 @@
  * @flow
  */
 import React, {PureComponent} from 'react';
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
 import { StyleSheet, ScrollView, View } from 'react-native'
 import { Colors, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
 import { Line, Footer, Button, StatusBarComp, ExtraLargeText, SmallText, RadioGroup } from '../../components'
 import { Header } from '../Header';
-
-const platformList = [
-    {
-        label: 'HP Latex',
-        value: 1
-    },
-    {
-        label: 'HP Scitex',
-        value: 2
-    },
-    {
-        label: 'HP HDR',
-        value: 3
-    },
-    {
-        label: 'HP PageWide XL',
-        value: 4
-    },
-    {
-        label: 'HP PageWide A4',
-        value: 5
-    },
-    {
-        label: 'HP Latex',
-        value: 6
-    },
-    {
-        label: 'HP Scitex',
-        value: 7
-    },
-    {
-        label: 'HP HDR',
-        value: 8
-    },
-    {
-        label: 'HP PageWide XL',
-        value: 9
-    },
-    {
-        label: 'HP PageWide A4',
-        value: 10
-    },
-    {
-        label: 'HP Latex',
-        value: 11
-    },
-    {
-        label: 'HP Scitex',
-        value: 12
-    },
-    {
-        label: 'HP HDR',
-        value: 13
-    },
-    {
-        label: 'HP PageWide XL',
-        value: 14
-    },
-    {
-        label: 'HP PageWide A4',
-        value: 15
-    },
-]
-
+import { Actions } from '../../redux'
 
 type Props = {
-    style?: number | Object | Array<number>
+    style?: number | Object | Array<number>,
+    navigation: any,
+    platforms: Array<Object>
 }
 
-export class DefaultSettings extends PureComponent<Props> {
-    constructor(props) {
+type State = {
+    value: number
+}
+
+class DefaultSettings extends PureComponent<Props, State> {
+    static defaultProps = {
+        style: undefined
+    }
+
+    constructor(props: Props) {
         super(props)
-        this.state = {}
+        this.state = {value: props.platformId}
     }
 
     onSave = () => {
+        this.props.setDefaultPlatform(this.state.value)
         this.props.navigation.goBack()
     }
 
@@ -92,8 +42,8 @@ export class DefaultSettings extends PureComponent<Props> {
         this.props.navigation.goBack()
     }
 
-    onRadioButtonSelect = (data) => {
-        console.log('data',data)
+    onRadioButtonSelect = (value: number) => {
+        this.setState({value: value})
     }
 
     renderSaveBtn = () => {
@@ -122,10 +72,17 @@ export class DefaultSettings extends PureComponent<Props> {
     }
 
     render() {
+        const {platforms, navigation, platformId, style} = this.props
+        const platformList = platforms.map(platform => {
+            return {
+                label: platform.platform_name,
+                value: platform.platform_id
+            }
+        })
         return <View style={styles.container}>
             <StatusBarComp/>
-            <Header navigation={this.props.navigation}/>
-            <ScrollView style={StyleSheet.flatten([styles.innerContainer, this.props.style])}>
+            <Header navigation={navigation}/>
+            <ScrollView style={StyleSheet.flatten([styles.innerContainer, style])}>
                 <ExtraLargeText style={styles.title} text={'Set default platform'}/>
                 <SmallText style={styles.description} text={'Select your default platform for the landing page'}/>
                 <Line style={styles.line}/>
@@ -134,7 +91,8 @@ export class DefaultSettings extends PureComponent<Props> {
                     size={20} 
                     value={2}
                     color={Colors.bodyPrimaryVarient} 
-                    onPress={this.onRadioButtonSelect} 
+                    onPress={this.onRadioButtonSelect}
+                    value={this.state.value} 
                 />
                 <Line style={styles.line}/>
                 {this.renderButtons()}
@@ -144,9 +102,18 @@ export class DefaultSettings extends PureComponent<Props> {
     }
 }
 
-DefaultSettings.defaultProps = {
-    style: undefined
+function mapStateToProps(state) {
+    return {
+        platforms: state.settings.platforms,
+        platformId: state.defaultSettings.platformId
+    }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DefaultSettings)
 
 const styles = StyleSheet.create({
     innerContainer: {
@@ -210,3 +177,68 @@ const styles = StyleSheet.create({
         paddingBottom: 10
     }
 })
+
+
+
+// const platformList = [
+//     {
+//         label: 'HP Latex',
+//         value: 1
+//     },
+//     {
+//         label: 'HP Scitex',
+//         value: 2
+//     },
+//     {
+//         label: 'HP HDR',
+//         value: 3
+//     },
+//     {
+//         label: 'HP PageWide XL',
+//         value: 4
+//     },
+//     {
+//         label: 'HP PageWide A4',
+//         value: 5
+//     },
+//     {
+//         label: 'HP Latex',
+//         value: 6
+//     },
+//     {
+//         label: 'HP Scitex',
+//         value: 7
+//     },
+//     {
+//         label: 'HP HDR',
+//         value: 8
+//     },
+//     {
+//         label: 'HP PageWide XL',
+//         value: 9
+//     },
+//     {
+//         label: 'HP PageWide A4',
+//         value: 10
+//     },
+//     {
+//         label: 'HP Latex',
+//         value: 11
+//     },
+//     {
+//         label: 'HP Scitex',
+//         value: 12
+//     },
+//     {
+//         label: 'HP HDR',
+//         value: 13
+//     },
+//     {
+//         label: 'HP PageWide XL',
+//         value: 14
+//     },
+//     {
+//         label: 'HP PageWide A4',
+//         value: 15
+//     },
+// ]

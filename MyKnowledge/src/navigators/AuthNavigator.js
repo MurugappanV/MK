@@ -8,7 +8,9 @@ import React, { PureComponent } from 'react';
 import { createStackNavigator } from 'react-navigation';
 import {  LoginContainer, ForgotPassContainer } from '../containers'
 
-type Props = {};
+type Props = {
+    navigation: any
+};
 export class AuthNavigator extends PureComponent<Props> {
     render() {
         return <Auth screenProps={{ rootNavigation: this.props.navigation }}/>;

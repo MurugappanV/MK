@@ -5,45 +5,77 @@
  * @flow
  */
 import React, {PureComponent} from 'react';
-import { StyleSheet, View } from 'react-native'
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
+import { StyleSheet, View, Alert } from 'react-native'
 import { Colors, Metrics, Images, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
-import { Line, Footer, ImageWthTitle, InputWthLogo, Button, StatusBarComp } from '../../components'
+import { Line, Footer, ImageWthTitle, InputWthLogo, Button, StatusBarComp, AlertComp } from '../../components'
+import { LoginApi, setCookie } from '../../service'
+import { setAuthValue, setUserName } from '../../storage'
+import { Actions } from '../../redux'
 
 type Props = {
-    style?: number | Object | Array<number>
+    style?: number | Object | Array<number>,
+    navigation: any,
+    screenProps: any,
+    setUserName: Function
 }
 
-export class LoginScreen extends PureComponent<Props> {
-    constructor(props) {
+type State = {
+    userName: string,
+    password: string,
+    userNameInRef: any,
+    passwordInRef: any,
+}
+
+class LoginScreen extends PureComponent<Props, State> {
+    static defaultProps = {
+        style: undefined
+    }
+
+    constructor(props: Props) {
         super(props)
         this.state = {userName: "", password: "", userNameInRef: null, passwordInRef: null}
     }
 
-    onUserNameChange = (name) => {
+    onUserNameChange = (name: string) => {
         this.setState({userName: name})
     }
 
-    onPasswordChange = (password) => {
+    onPasswordChange = (password: string) => {
         this.setState({password: password})
     }
 
-    onLogin = () => {
+    onLoginSuccess = (data: Object) => {
+        const {name, token} = data
+        setCookie(token)
+        setAuthValue(token)
+        setUserName(name)
+        this.props.setUserName(name)
         this.props.screenProps.rootNavigation.navigate("Home")
+    }
+
+    onLoginFailure = (error) => {
+        AlertComp('Login error', 'Invalid username or password')
+    }
+
+    onLogin = () => {
+        LoginApi(this.state.userName, this.state.password, this.onLoginSuccess, this.onLoginFailure)
     }
 
     onFrgtPassWrd = () => {
         this.props.navigation.navigate("ForgotPassword")
     }
 
-    passwordInputRef = (ref) => {
+    passwordInputRef = (ref: any) => {
         this.setState({passwordInRef: ref})
     }
 
-    userNameInRef = (ref) => {
+    userNameInRef = (ref: any) => {
         this.setState({userNameInRef: ref})
     }
 
-    renderUserName = (userName) => {
+    renderUserName = (userName: string) => {
         return <InputWthLogo 
             style={styles.inputContainer}
             source={Images.userImg} 
@@ -56,7 +88,7 @@ export class LoginScreen extends PureComponent<Props> {
         />
     }
 
-    renderPassword = (password) => {
+    renderPassword = (password: string) => {
         return <InputWthLogo 
             style={styles.inputContainer}
             source={Images.lockImg} 
@@ -110,9 +142,16 @@ export class LoginScreen extends PureComponent<Props> {
     }
 }
 
-LoginScreen.defaultProps = {
-    style: undefined
+function mapStateToProps(state) {
+    return {
+    }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create({
     innerContainer: {

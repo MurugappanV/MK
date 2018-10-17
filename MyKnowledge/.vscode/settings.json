@@ -1,0 +1,11 @@
+{
+    "javascript.validate.enable": false,
+    "flow.pathToFlow": "${workspaceRoot}/node_modules/.bin/flow",
+    "flow.stopFlowOnExit": true,
+    "flow.enabled": true,
+    "flow.useNPMPackagedFlow": false,
+    "flow.showStatus":  true,
+    "flow.showUncovered": false,
+    "flow.runOnEdit": true,
+    "flow.useLSP": false
+}

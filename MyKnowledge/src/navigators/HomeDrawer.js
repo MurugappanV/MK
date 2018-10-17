@@ -5,58 +5,36 @@
  * @flow
  */
 import React, {PureComponent} from 'react';
+import {connect} from 'react-redux';
 import {NavigationActions} from 'react-navigation';
-import { Colors, Images, ScalePerctFullHeight, ScalePerctFullWidth} from '../asset'
+import { Colors, DrawerData, ScalePerctFullHeight, ScalePerctFullWidth} from '../asset'
 import {StyleSheet, SectionList, Linking, View} from 'react-native';
 import { MediumText, Line, LogoTextBtn } from '../components';
 
-const drawerData = [
-  {
-    title: 'Settings', 
-    data: [
-      {routeName: 'DefaultSettings', title: 'Set Default Platform', img: Images.editImg}, 
-      {routeName: 'NotificationSettings', title: 'Notifications', img: Images.notifyImg},
-      {routeName: 'ChangePassword', title: 'Change Password', img: Images.unlockImg},
-      {routeName: 'LogOut', title: 'Log out', img: Images.logoutImg}
-    ]
-  },
-  {
-    title: 'Document Types', 
-    data: [
-      {routeName: 'DocumentList', title: 'All', img: Images.allImg}, 
-      {routeName: 'DocumentList', title: 'Newsletters', img: Images.fileImg},
-      {routeName: 'DocumentList', title: 'Service Documents', img: Images.bookImg},
-      {routeName: 'DocumentList', title: 'Videos', img: Images.videoImg},
-      {routeName: 'DocumentList', title: 'Trainings', img: Images.trainingImg},
-      {routeName: 'DocumentList', title: 'Communications', img: Images.bellImg}
-    ]
-  },
-  {
-    title: 'Contact Us', 
-    data: [
-      {routeName: 'Feedback', title: 'Feedback', img: Images.chatImg}, 
-      {routeName: 'Help', title: 'Help', img: Images.userBlackImg}
-    ]
-  }
-]
-
 type Props = {
-  style?: number | Object | Array<number>
+  style?: number | Object | Array<number>,
+  userName: string,
+  navigation: any,
+  screenProps: any
 }
 
-export class HomeDrawer extends PureComponent<Props> {
-    navigateToScreen = (route) => () => {
+class HomeDrawer extends PureComponent<Props> {
+    static defaultProps = {
+        style: undefined
+    }
+
+    navigateToScreen = (route: string) => () => {
         switch(route) {
             case "LogOut": {
                 this.props.screenProps.rootNavigation.navigate("Auth")
                 break;
             }
             case "Feedback": {
-                Linking.openURL('mailto:lfpmyknowledgeapp@hp.com?subject=Feedback by user')
+                Linking.openURL(`mailto:lfpmyknowledgeapp@hp.com?subject=Feedback by ${this.props.userName}`)
                 break;
             }
             case "Help": {
-                Linking.openURL('mailto:lfpmyknowledgeapp@hp.com?subject=Support request by user')
+                Linking.openURL(`mailto:lfpmyknowledgeapp@hp.com?subject=Support request by ${this.props.userName}`)
                 break;
             }
             default: {
@@ -70,14 +48,14 @@ export class HomeDrawer extends PureComponent<Props> {
         
     }
 
-    renderHeader = (title) => {
+    renderHeader = (title: string) => {
         return <View style={styles.headerContainer}>
             <MediumText style={styles.header} text={title}/>
             <Line style={styles.line}/>
         </View>
     }
 
-    renderItem = (item,index) => {
+    renderItem = (item: any,index: number) => {
         return <View key={index}>
             {index != 0 && <Line style={styles.itemLine}/>}
             <LogoTextBtn
@@ -95,16 +73,20 @@ export class HomeDrawer extends PureComponent<Props> {
                 style={StyleSheet.flatten([styles.container, this.props.style])}
                 renderItem={({item, index, section}) => this.renderItem(item,index)}
                 renderSectionHeader={({section: {title}}) => (this.renderHeader(title))}
-                sections={drawerData}
+                sections={DrawerData}
                 keyExtractor={(item, index) => item.title}
             />
         );
     }
 }
 
-HomeDrawer.defaultProps = {
-    style: undefined
+function mapStateToProps(state) {
+    return {
+        userName: state.userName
+    }
 }
+
+export default connect(mapStateToProps)(HomeDrawer);
 
 const styles = StyleSheet.create({
     container: {
