@@ -5,47 +5,34 @@
  * @flow
  */
 import React, {PureComponent} from 'react';
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
 import { StyleSheet, SectionList, View } from 'react-native'
 import { Colors, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
 import { Line, Footer, Button, StatusBarComp, ToggleBtn, MediumText } from '../../components'
 import { Header } from '../Header';
+import { Actions } from '../../redux'
 
 const notificationData = [
     {
       title: null, 
       data: [
-        {value: 1, title: 'Set Default Platform'}, 
-        {value: 1, title: 'Notifications'},
-        {value: 1, title: 'Change Password'},
-        {value: 1, title: 'Log out'}
-      ]
-    },
-    {
-      title: 'Document Types', 
-      data: [
-        {value: 1, title: 'All'}, 
-        {value: 1, title: 'Newsletters'},
-        {value: 1, title: 'Service Documents'},
-        {value: 1, title: 'Videos'},
-        {value: 1, title: 'Trainings'},
-        {value: 1, title: 'Communications'}
-      ]
-    },
-    {
-      title: 'Contact Us', 
-      data: [
-        {value: 1, title: 'Feedback'}, 
-        {value: 1, title: 'Help'}
+        {title: 'Email Notification'}, 
+        {title: 'Mobile Notification'},
       ]
     }
-  ]
+]
 
 type Props = {
     style?: number | Object | Array<number>
 }
 
-export class NotificationSettings extends PureComponent<Props> {
-    constructor(props) {
+class NotificationSettings extends PureComponent<Props> {
+    static defaultProps = {
+        style: undefined
+    }
+
+    constructor(props: Props) {
         super(props)
         this.state = {}
     }
@@ -105,27 +92,47 @@ export class NotificationSettings extends PureComponent<Props> {
     }
 
     render() {
+        let count = 2
+        const {platforms} = this.props
+        const data = notificationData.concat(platforms.map(platform => {
+            count++
+            return {
+                title: platform.platform_name,
+                data: platform.platform_models.map(model => {
+                    count++
+                    return { title: model }
+                })
+            }
+        }))
         return <View style={styles.container}>
             <StatusBarComp/>
             <Header navigation={this.props.navigation}/>
-            
             <SectionList
                 style={StyleSheet.flatten([styles.container, this.props.style])}
                 renderItem={({item, index, section}) => this.renderItem(item,index)}
                 renderSectionHeader={({section: {title}}) => (this.renderHeader(title))}
                 renderSectionFooter={this.renderFooter}
-                sections={notificationData}
+                sections={data}
                 keyExtractor={(item, index) => item.title}
                 ListFooterComponent={this.renderButtons}
+                initialNumToRender={count}
             />
             <Footer/>
         </View>
     }
 }
 
-NotificationSettings.defaultProps = {
-    style: undefined
+function mapStateToProps(state) {
+    return {
+        platforms: state.settings.platforms
+    }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationSettings)
 
 const styles = StyleSheet.create({
     container: {

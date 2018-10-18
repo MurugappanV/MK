@@ -12,22 +12,23 @@ import {Colors, Metrics} from '../../asset'
 type Props = {
     text: string,
     style?: number | Object | Array<number>,
+    textProps?: Object
 }
 
 export function ExtraLargeText(props: Props) {
-    return <Text style={StyleSheet.flatten([styles.extralargeText, props.style])}>{props.text}</Text>
+    return <Text {...props.textProps} style={StyleSheet.flatten([styles.extralargeText, props.style])}>{props.text}</Text>
 }
 
 export function LargeText(props: Props) {
-    return <Text style={StyleSheet.flatten([styles.largeText, props.style])}>{props.text}</Text>
+    return <Text {...props.textProps} style={StyleSheet.flatten([styles.largeText, props.style])}>{props.text}</Text>
 }
 
 export function MediumText(props: Props) {
-    return <Text style={StyleSheet.flatten([styles.mediumText, props.style])}>{props.text}</Text>
+    return <Text {...props.textProps} style={StyleSheet.flatten([styles.mediumText, props.style])}>{props.text}</Text>
 }
 
 export function SmallText(props: Props) {
-    return <Text style={StyleSheet.flatten([styles.smallText, props.style])}>{props.text}</Text>
+    return <Text {...props.textProps} style={StyleSheet.flatten([styles.smallText, props.style])}>{props.text}</Text>
 }
 
 ExtraLargeText.defaultProps = {

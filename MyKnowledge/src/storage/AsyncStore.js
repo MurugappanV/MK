@@ -16,3 +16,11 @@ export function setUserName(name) {
 export function getUserName() {
     return AsyncStorage.getItem('userName')
 }
+
+export function setDefaultPlatform(platformId) {
+    AsyncStorage.setItem('platformId', platformId);
+}
+
+export function getDefaultPlatform() {
+    return AsyncStorage.getItem('platformId')
+}

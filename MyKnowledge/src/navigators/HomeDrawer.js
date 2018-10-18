@@ -10,6 +10,7 @@ import {NavigationActions} from 'react-navigation';
 import { Colors, DrawerData, ScalePerctFullHeight, ScalePerctFullWidth} from '../asset'
 import {StyleSheet, SectionList, Linking, View} from 'react-native';
 import { MediumText, Line, LogoTextBtn } from '../components';
+import { setAuthValue, setUserName } from '../storage'
 
 type Props = {
   style?: number | Object | Array<number>,
@@ -26,6 +27,9 @@ class HomeDrawer extends PureComponent<Props> {
     navigateToScreen = (route: string) => () => {
         switch(route) {
             case "LogOut": {
+                setAuthValue(null)
+                setUserName(null)
+                this.props.logout()
                 this.props.screenProps.rootNavigation.navigate("Auth")
                 break;
             }

@@ -1,1 +1,1 @@
-export { FilterScreen as Filter } from "./FilterScreen";
+export { default as Filter } from "./FilterScreen";

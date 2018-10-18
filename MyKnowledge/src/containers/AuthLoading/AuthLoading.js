@@ -11,12 +11,13 @@ import { StyleSheet, View } from 'react-native'
 import {Colors, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
 import {LoadingComponent} from '../../components'
 import { setCookie } from '../../service'
-import { getAuthValue, getUserName } from '../../storage'
+import { getAuthValue, getUserName, getDefaultPlatform } from '../../storage'
 import { Actions } from '../../redux'
 
 type Props = {
     navigation: any,
-    setUserName: Function
+    setUserName: Function,
+    setDefaultPlatform: Function
 }
 
 class AuthLoading extends PureComponent<Props> {
@@ -31,7 +32,11 @@ class AuthLoading extends PureComponent<Props> {
                 getUserName().then(name => {
                     props.setUserName(name)
                 })
-                this.props.navigation.navigate("Home")
+                getDefaultPlatform().then(platformId => {
+                    platformId = !!platformId ? platformId : 1
+                    props.setDefaultPlatform(platformId)
+                    this.props.navigation.navigate("Home")
+                })
             } else {
                 this.props.navigation.navigate("Auth")
             }

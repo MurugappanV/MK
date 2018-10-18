@@ -22,144 +22,142 @@ const sourceType = PropTypes.oneOfType([PropTypes.object, PropTypes.number])
 
 // A customiseable ListView that allows you to select multiple rows
 export class SelectMultiple extends Component {
-  static propTypes = {
-    items: PropTypes.arrayOf(itemType).isRequired,
-    selectedItems: PropTypes.arrayOf(itemType),
+	static propTypes = {
+		items: PropTypes.arrayOf(itemType).isRequired,
+		selectedItems: PropTypes.any,
 
-    onSelectionsChange: PropTypes.func.isRequired,
+		onSelectionsChange: PropTypes.func.isRequired,
+		renderLabel: PropTypes.func,
+		listViewProps: PropTypes.any,
+		style: styleType,
+		rowStyle: styleType,
+		checkboxStyle: styleType,
+		labelStyle: styleType,
 
-    checkboxSource: sourceType,
-    selectedCheckboxSource: sourceType,
-    renderLabel: PropTypes.func,
-    listViewProps: PropTypes.any,
-    style: styleType,
-    rowStyle: styleType,
-    checkboxStyle: styleType,
-    labelStyle: styleType,
+		selectedRowStyle: styleType,
+		selectedCheckboxStyle: styleType,
+		selectedLabelStyle: styleType
+	}
 
-    selectedRowStyle: styleType,
-    selectedCheckboxStyle: styleType,
-    selectedLabelStyle: styleType
-  }
+	static defaultProps = {
+		selectedItems: [],
+		style: {},
+		rowStyle: {},
+		checkboxStyle: {},
+		checkboxCheckedStyle: {},
+		labelStyle: {},
+		checkboxSource: "",
+		selectedCheckboxSource: "",
+		renderLabel: null
+	}
 
-  static defaultProps = {
-    selectedItems: [],
-    style: {},
-    rowStyle: {},
-    checkboxStyle: {},
-    checkboxCheckedStyle: {},
-    labelStyle: {},
-    checkboxSource: "",
-    selectedCheckboxSource: "",
-    renderLabel: null
-  }
+	constructor (props) {
+		super(props)
 
-  constructor (props) {
-    super(props)
+		const rows = this.getRowData(props)
 
-    const rows = this.getRowData(props)
+		const dataSource = new ListView.DataSource({
+		rowHasChanged: (r1, r2) => r1.value !== r2.value || r1.selected !== r2.selected
+		}).cloneWithRows(rows)
 
-    const dataSource = new ListView.DataSource({
-      rowHasChanged: (r1, r2) => r1.value !== r2.value || r1.selected !== r2.selected
-    }).cloneWithRows(rows)
+		this.state = { dataSource }
+	}
 
-    this.state = { dataSource }
-  }
+	componentWillReceiveProps (nextProps) {
+		const rows = this.getRowData(nextProps)
+		const dataSource = this.state.dataSource.cloneWithRows(rows)
+		this.setState({ dataSource })
+	}
 
-  componentWillReceiveProps (nextProps) {
-    const rows = this.getRowData(nextProps)
-    const dataSource = this.state.dataSource.cloneWithRows(rows)
-    this.setState({ dataSource })
-  }
+	getRowData ({ items, selectedItems }) {
+		items = items.map(this.toLabelValueObject)
+		selectedItems = (selectedItems || []).map(this.toLabelValueObject)
 
-  getRowData ({ items, selectedItems }) {
-    items = items.map(this.toLabelValueObject)
-    selectedItems = (selectedItems || []).map(this.toLabelValueObject)
+		items.forEach((item) => {
+		item.selected = selectedItems.some((i) => i.value === item.value)
+		})
 
-    items.forEach((item) => {
-      item.selected = selectedItems.some((i) => i.value === item.value)
-    })
+		return items
+	}
 
-    return items
-  }
+	onRowPress (row) {
+		const { label, value } = row
+		let { selectedItems } = this.props
 
-  onRowPress (row) {
-    const { label, value } = row
-    let { selectedItems } = this.props
+		selectedItems = (selectedItems || []).map(this.toLabelValueObject)
 
-    selectedItems = (selectedItems || []).map(this.toLabelValueObject)
+		const index = selectedItems.findIndex((selectedItem) => selectedItem.value === value)
 
-    const index = selectedItems.findIndex((selectedItem) => selectedItem.value === value)
+		if (index > -1) {
+		selectedItems = selectedItems.filter((selectedItem) => selectedItem.value !== value)
+		} else {
+		selectedItems = selectedItems.concat({ label, value })
+		}
 
-    if (index > -1) {
-      selectedItems = selectedItems.filter((selectedItem) => selectedItem.value !== value)
-    } else {
-      selectedItems = selectedItems.concat({ label, value })
-    }
+		this.props.onSelectionsChange(selectedItems, { label, value })
+	}
 
-    this.props.onSelectionsChange(selectedItems, { label, value })
-  }
+	toLabelValueObject (obj) {
+		console.log("obj type ", Object.prototype.toString.call(obj))
+		if (Object.prototype.toString.call(obj) === '[object String]' || Object.prototype.toString.call(obj) === '[object Number]') {
+		return { label: obj, value: obj }
+		} else {
+		return { label: obj.label, value: obj.value }
+		}
+	}
 
-  toLabelValueObject (obj) {
-    if (Object.prototype.toString.call(obj) === '[object String]') {
-      return { label: obj, value: obj }
-    } else {
-      return { label: obj.label, value: obj.value }
-    }
-  }
+	render () {
+		const { dataSource } = this.state
+		const { style, listViewProps } = this.props
+		const { renderItemRow } = this
+		return <ListView style={style} dataSource={dataSource} renderRow={renderItemRow} {...(listViewProps || {})} />
+	}
 
-  render () {
-    const { dataSource } = this.state
-    const { style, listViewProps } = this.props
-    const { renderItemRow } = this
-    return <ListView style={style} dataSource={dataSource} renderRow={renderItemRow} {...(listViewProps || {})} />
-  }
+	renderLabel = (label, style, selected) => {
+		if (this.props.renderLabel) {
+		return this.props.renderLabel(label, style, selected)
+		}
+		return (
+		<Text style={style}>{label}</Text>
+		)
+	}
 
-  renderLabel = (label, style, selected) => {
-    if (this.props.renderLabel) {
-      return this.props.renderLabel(label, style, selected)
-    }
-    return (
-      <Text style={style}>{label}</Text>
-    )
-  }
+	renderItemRow = (row) => {
+		let {
+		checkboxSource,
+		rowStyle,
+		labelStyle,
+		checkboxStyle
+		} = this.props
 
-  renderItemRow = (row) => {
-    let {
-      checkboxSource,
-      rowStyle,
-      labelStyle,
-      checkboxStyle
-    } = this.props
+		const {
+		
+		selectedRowStyle,
+		selectedCheckboxStyle,
+		selectedLabelStyle
+		} = this.props
 
-    const {
-      
-      selectedRowStyle,
-      selectedCheckboxStyle,
-      selectedLabelStyle
-    } = this.props
+		if (row.selected) {
+		checkboxSource = Images.checkSelectImg
+		rowStyle = mergeStyles(styles.row, rowStyle, selectedRowStyle)
+		checkboxStyle = mergeStyles(styles.checkbox, checkboxStyle, selectedCheckboxStyle)
+		labelStyle = mergeStyles(styles.label, labelStyle, selectedLabelStyle)
+		} else {
+		checkboxSource = Images.checkBoxImg
+		rowStyle = mergeStyles(styles.row, rowStyle)
+		checkboxStyle = mergeStyles(styles.checkbox, checkboxStyle)
+		labelStyle = mergeStyles(styles.label, labelStyle)
+		}
 
-    if (row.selected) {
-      checkboxSource = Images.checkSelectImg
-      rowStyle = mergeStyles(styles.row, rowStyle, selectedRowStyle)
-      checkboxStyle = mergeStyles(styles.checkbox, checkboxStyle, selectedCheckboxStyle)
-      labelStyle = mergeStyles(styles.label, labelStyle, selectedLabelStyle)
-    } else {
-      checkboxSource = Images.checkBoxImg
-      rowStyle = mergeStyles(styles.row, rowStyle)
-      checkboxStyle = mergeStyles(styles.checkbox, checkboxStyle)
-      labelStyle = mergeStyles(styles.label, labelStyle)
-    }
-
-    return (
-      <TouchableWithoutFeedback onPress={() => this.onRowPress(row)}>
-        <View style={rowStyle}>
-          <Image style={checkboxStyle} source={checkboxSource} />
-          {this.renderLabel(row.label, labelStyle, row.selected)}
-        </View>
-      </TouchableWithoutFeedback>
-    )
-  }
+		return (
+		<TouchableWithoutFeedback onPress={() => this.onRowPress(row)}>
+			<View style={rowStyle}>
+			<Image style={checkboxStyle} source={checkboxSource} />
+			{this.renderLabel(row.label, labelStyle, row.selected)}
+			</View>
+		</TouchableWithoutFeedback>
+		)
+	}
 }
 
 const styles =  StyleSheet.create({

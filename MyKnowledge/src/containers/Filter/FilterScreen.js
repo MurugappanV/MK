@@ -5,24 +5,73 @@
  * @flow
  */
 import React, {PureComponent} from 'react';
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
 import { StyleSheet, Modal, TouchableOpacity, View } from 'react-native'
 import { Colors, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
-import { Line, Footer, Button, StatusBarComp, MediumText, SmallText, SelectMultiple } from '../../components'
+import { Line, Footer, Button, StatusBarComp, MediumText, SmallText, SelectMultiple, RadioGroup } from '../../components'
 import { Header } from '../Header';
 import { FilterPopUp } from './FilterPopUp';
+import { Actions } from '../../redux'
 
 type Props = {
     style?: number | Object | Array<number>,
-    navigation: any
+    navigation: any,
+    filters: any,
+    accessories: any,
+    platforms: any,
+    platformId: number
 }
 
-export class FilterScreen extends PureComponent<Props> {
-    constructor(props) {
+type State = {
+    modalVisible: Boolean,
+    selectedFilter: String,
+    selectedPlatform: number,
+    selectedSeries: Array<String>,
+    selectedAccessories: Array<number>
+}
+
+const Platform = "Platform"
+const Series = "Series"
+const Accessories = "Accessories"
+
+class FilterScreen extends PureComponent<Props, State> {
+    static defaultProps = {
+        style: undefined
+    }
+
+    constructor(props: Props) {
         super(props)
-        this.state = {modalVisible: false}
+        const {platformId, series, accessories} = props.filters
+        console.log('platform', platformId + " " + series + " " + accessories)
+        let platformName = null
+        this.platformList = props.platforms.map(platform => {
+            if(platform.platform_id == platformId) {
+                platformName = platform.platform_name
+                this.seriesList = platform.platform_models
+            }
+            return {
+                label: platform.platform_name,
+                value: platform.platform_id
+            }
+        })
+        let selectedAccessorieNames = []
+        this.accessoriesList = props.accessories.map(accessory => {
+            if(accessories.includes(accessory.id)) {
+                selectedAccessorieNames.push(accessory.name)
+            }
+            return {
+                label: accessory.name,
+                value: accessory.id
+            }
+        })
+        console.log('platform list ', platformName)
+        this.state = {modalVisible: false, selectedFilter: null, selectedPlatformName: platformName, selectedPlatform: platformId, selectedSeries: series, selectedAccessories: accessories, selectedAccessorieNames: selectedAccessorieNames}
     }
 
     onApply = () => {
+        const {selectedPlatform, selectedSeries, selectedAccessories} = this.state
+        this.props.setFilters(selectedPlatform, selectedSeries, selectedAccessories)
         this.props.navigation.goBack()
     }
 
@@ -31,22 +80,45 @@ export class FilterScreen extends PureComponent<Props> {
     }
 
     onClear = () => {
-        this.props.navigation.goBack()
+        const name = this.props.platforms.find(platform => platform.platform_id == this.props.platformId).platform_name
+        this.setState({selectedPlatformName: name,selectedPlatform: this.props.platformId, selectedSeries: [], selectedAccessories: [], selectedAccessorieNames: []})
     }
 
-    onFilterSelect = () => {
-        this.setState({modalVisible: true})
+    onFilterSelect = (label: String) => {
+        this.setState({modalVisible: true, selectedFilter: label})
     }
 
     onFilterClose = () => {
-        console.log("close")
-        this.setState({modalVisible: false})
+        this.setState({modalVisible: false, selectedFilter: null})
     }
 
-    renderFilter = (label) => {
-        return <TouchableOpacity style={styles.filter} onPress={this.onFilterSelect}>
+    onPlatformChange = (value: number, label: String) => {
+        console.log("selected platform ", value)
+        this.seriesList = this.props.platforms.find(platform => platform.platform_id == value).platform_models
+        this.setState({selectedPlatformName: label, selectedPlatform: value, selectedSeries: []})
+    }
+
+    onSeriesChange = (selectedValues: Array) => {
+        this.setState({selectedSeries: selectedValues.map(item => item.label)})
+    }
+
+    onAccessoriesChange = (selectedValues: Array) => {
+        this.setState({selectedAccessories: selectedValues.map(item => item.value)})
+        this.setState({selectedAccessorieNames: selectedValues.map(item => item.label)})
+    }
+
+    renderFilter = (label: string) => {
+        let filterValues = ''
+        if(label == Platform) {
+            filterValues = this.state.selectedPlatformName
+        } else if(label == Series) {
+            filterValues = this.state.selectedSeries.join(',')
+        } else {
+            filterValues = this.state.selectedAccessorieNames.join(',')
+        }
+        return <TouchableOpacity style={styles.filter} onPress={() => this.onFilterSelect(label)}>
             <MediumText style={styles.label} text={label}/>
-            <SmallText style={styles.filterValues} text={label}/>
+            <SmallText textProps={{ellipsizeMode: 'tail', numberOfLines: 1}} style={styles.filterValues} text={filterValues}/>
             <MediumText style={styles.filterIcon} text={'>'}/>
         </TouchableOpacity>
     }
@@ -89,18 +161,42 @@ export class FilterScreen extends PureComponent<Props> {
     }
 
     renderFilterItems = () => {
-        return <SelectMultiple
-            items={["HP 100", "HP 200", "HP XL"]}
-            selectedItems={["HP 200"]}
-            onSelectionsChange={() => {}} 
-        />
+        if(this.state.selectedFilter == Platform) {
+            return <RadioGroup 
+                data={this.platformList} 
+                size={20} 
+                color={Colors.bodyPrimaryVarient} 
+                onPress={this.onPlatformChange}
+                value={this.state.selectedPlatform} 
+            />
+        } else if(this.state.selectedFilter == Series) {
+            console.log("series ", this.seriesList + " " + this.state.selectedSeries)
+            return <SelectMultiple
+                items={this.seriesList}
+                selectedItems={this.state.selectedSeries}
+                onSelectionsChange={this.onSeriesChange} 
+            />
+        } else {
+            console.log("accc ", this.accessoriesList + " " + this.state.selectedAccessories)
+            const accessory = this.accessoriesList.filter(element => this.state.selectedAccessories.includes(element.value))
+            return <SelectMultiple
+                items={this.accessoriesList}
+                selectedItems={accessory}
+                onSelectionsChange={this.onAccessoriesChange} 
+            />
+        }
     }
 
-    renderFilterPopUp = (modalVisible) => {
+    renderFilterPopUp = (modalVisible: Boolean) => {
         return <FilterPopUp 
             visible={modalVisible}
             onApply={this.onFilterClose}
             renderItem={this.renderFilterItems}
+            extraData={{
+                selectedPlatform: this.state.selectedPlatform,
+                selectedSeries: this.state.selectedSeries,
+                selectedAccessories: this.state.selectedAccessories,
+            }}
         />
     }
 
@@ -109,13 +205,13 @@ export class FilterScreen extends PureComponent<Props> {
         return <View style={styles.container}>
             <StatusBarComp/>
             {this.renderFilterPopUp(modalVisible)}
-            <Header navigation={this.props.navigation}/>
+            <Header navigation={this.props.screenProps.rootNavigation}/>
             <View style={StyleSheet.flatten([styles.innerContainer, this.props.style])}>
-                {this.renderFilter("Platform")}
+                {this.renderFilter(Platform)}
                 <Line style={styles.line}/>
-                {this.renderFilter("Series")}
+                {this.renderFilter(Series)}
                 <Line style={styles.line}/>
-                {this.renderFilter("Accessories")}
+                {this.renderFilter(Accessories)}
                 {this.renderButtons()}
             </View>
             <Footer/>
@@ -123,9 +219,20 @@ export class FilterScreen extends PureComponent<Props> {
     }
 }
 
-FilterScreen.defaultProps = {
-    style: undefined
+function mapStateToProps(state) {
+    return {
+        platforms: state.settings.platforms,
+        accessories: state.settings.accessories,
+        platformId: state.defaultSettings.platformId,
+        filters: state.filters
+    }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilterScreen)
 
 const styles = StyleSheet.create({
     innerContainer: {

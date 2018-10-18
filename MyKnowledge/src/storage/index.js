@@ -1,1 +1,1 @@
-export { getAuthValue, setAuthValue, getUserName, setUserName } from "./AsyncStore";
+export { getAuthValue, setAuthValue, getUserName, setUserName, getDefaultPlatform, setDefaultPlatform } from "./AsyncStore";

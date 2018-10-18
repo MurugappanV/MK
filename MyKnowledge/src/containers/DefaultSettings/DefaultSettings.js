@@ -12,6 +12,7 @@ import { Colors, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../..
 import { Line, Footer, Button, StatusBarComp, ExtraLargeText, SmallText, RadioGroup } from '../../components'
 import { Header } from '../Header';
 import { Actions } from '../../redux'
+import { setDefaultPlatform } from '../../storage'
 
 type Props = {
     style?: number | Object | Array<number>,
@@ -34,6 +35,7 @@ class DefaultSettings extends PureComponent<Props, State> {
     }
 
     onSave = () => {
+        setDefaultPlatform(this.state.value)
         this.props.setDefaultPlatform(this.state.value)
         this.props.navigation.goBack()
     }
@@ -89,7 +91,6 @@ class DefaultSettings extends PureComponent<Props, State> {
                 <RadioGroup 
                     data={platformList} 
                     size={20} 
-                    value={2}
                     color={Colors.bodyPrimaryVarient} 
                     onPress={this.onRadioButtonSelect}
                     value={this.state.value} 

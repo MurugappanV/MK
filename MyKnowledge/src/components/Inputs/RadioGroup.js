@@ -20,8 +20,8 @@ export class RadioGroup extends Component {
         return data;
     }
 
-    onPress = value => {
-        this.props.onPress(value)
+    onPress = (value, label) => {
+        this.props.onPress(value, label)
     };
 
     render() {
@@ -51,7 +51,7 @@ class RadioButton extends Component {
             <View>
                 <TouchableOpacity
                     style={styles.buttonContainer}
-                    onPress={() => { this.props.onPress(data.value); }}>
+                    onPress={() => { this.props.onPress(data.value, data.label); }}>
                     <View
                         style={[
                             styles.border,

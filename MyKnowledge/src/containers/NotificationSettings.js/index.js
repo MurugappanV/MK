@@ -1,1 +1,1 @@
-export { NotificationSettings } from "./NotificationSettings";
+export { default as NotificationSettings } from "./NotificationSettings";

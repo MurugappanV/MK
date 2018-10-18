@@ -12,4 +12,7 @@ export const defaultSettings = createReducer(initialState, {
             platformId: action.id
         }
     },
+    [Types.default.CLEAR_DEFAULT](state, action) {
+        return initialState
+    },
 });
