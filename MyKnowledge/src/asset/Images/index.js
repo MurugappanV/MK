@@ -29,4 +29,5 @@ export const Images = {
     closeImg: require("./close.png"),
     checkSelectImg: require("./icon-checkbox-checked.png"),
     checkBoxImg: require("./icon-checkbox.png"),
+    arrowImg: require("./arrow.png"),
 };

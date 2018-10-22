@@ -70,12 +70,27 @@ const Home = createDrawerNavigator({
     NotificationSettings: {
       screen: NotifySettingsContainer
     },
-    DocumentList: {
-      screen: DocumentNavigator
+    All: {
+      screen: props => <DocumentNavigator {...props} title="All"/>
+    },
+    Newsletters: {
+      screen: props => <DocumentNavigator {...props} title="Newsletters"/>
+    },
+    Service: {
+      screen: props => <DocumentNavigator {...props} title="Service"/>
+    },
+    Videos: {
+      screen: props => <DocumentNavigator {...props} title="Videos"/>
+    },
+    Trainings: {
+      screen: props => <DocumentNavigator {...props} title="Trainings"/>
+    },
+    Communications: {
+      screen: props => <DocumentNavigator {...props} title="Communications"/>
     }
     
   }, {
-	initialRouteName: "DocumentList",
+	initialRouteName: "All",
     contentComponent: HomeDrawer,
     drawerWidth: ScalePerctFullWidth(85)
   }

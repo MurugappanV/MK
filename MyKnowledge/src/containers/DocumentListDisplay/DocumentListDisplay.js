@@ -5,10 +5,14 @@
  * @flow
  */
 import React, {PureComponent} from 'react';
-import { StyleSheet, FlatList, View, TouchableOpacity } from 'react-native'
-import { Colors, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
-import { Line, Footer, StatusBarComp, MediumText, SmallText, SearchInput } from '../../components'
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
+import { StyleSheet, FlatList, View, TouchableOpacity, Image } from 'react-native'
+import { Colors, Images, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
+import { LoadingIndicatorComp, Line, Footer, StatusBarComp, MediumText, SmallText, SearchInput } from '../../components'
 import { Header } from '../Header';
+import { DocumentApi } from '../../service';
+import { Actions } from '../../redux'
 
 const documentData = [
         {value: 1, title: 'Set Default Platform'}, 
@@ -23,16 +27,81 @@ const documentData = [
         {value: 1, title: 'Communications'},
         {value: 1, title: 'Feedback'}, 
         {value: 1, title: 'Help'}
-  ]
+]
 
 type Props = {
-    style?: number | Object | Array<number>
+    style?: number | Object | Array<number>,
+    navigation: any,
+    screenProps: any,
+    setDocumentList: Function
 }
 
-export class DocumentListDisplay extends PureComponent<Props> {
-    constructor(props) {
+type State = {
+    searchSelected: Boolean,
+    seachKey: String,
+    pageNo: Number,
+    loading: boolean
+}
+
+class DocumentListDisplay extends PureComponent<Props, State> {
+    static defaultProps = {
+        style: undefined
+    }
+
+    constructor(props: Props) {
         super(props)
-        this.state = {searchSelected: false, seachKey: ""}
+        this.state = {searchSelected: false, seachKey: "", loading: false, filters: {}}
+    }
+
+    static getDerivedStateFromProps(props, state) {
+        const {filters} = props
+        if(filters != state.filters) {
+            return {
+                searchSelected: false,
+                seachKey: "",
+                filters: filters
+            }
+        }
+        return null
+    }
+
+    componentDidMount() {
+        if(this.props.documents.length == 0) {
+            const {platformId, series, accessories} = this.state.filters
+            this.fetchDocuments(1, platformId, series, accessories)
+        }
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(prevProps.filters != this.state.filters) {
+            const {platformId, series, accessories} = this.state.filters
+            this.fetchDocuments(1, platformId, series, accessories)
+        }
+    }
+
+    fetchDocuments = (pageNo: number, platform: number, series: Array<String>, accessories: Array<number>) => {
+        this.setState({loading: true})
+        DocumentApi(pageNo, platform, series, accessories, this.onDocumentFetched, this.onDocumentFetchFailure)
+    }
+
+    onLoadMore = () => {
+        const {pageNo, totalPages} = this.props
+        const {platformId, series, accessories} = this.state.filters
+        if(!this.state.loading && pageNo < totalPages) {
+            this.fetchDocuments(pageNo+1, platformId, series, accessories)
+        }
+    }
+
+    onDocumentFetched = (response) => {
+        this.setState({loading: false})
+        const {metadata, user_documents} = response
+        const {page, totalPages} = metadata
+        this.props.setDocumentList(page, totalPages, user_documents)
+    }
+
+    onDocumentFetchFailure = (error) => {
+        this.setState({loading: false})
+        
     }
 
     onItemSelect = () => {
@@ -47,7 +116,7 @@ export class DocumentListDisplay extends PureComponent<Props> {
         this.setState({searchSelected: false})
     }
 
-    onSeachKeyChange = (text) => {
+    onSeachKeyChange = (text: String) => {
         this.setState({seachKey: text})
     }
 
@@ -58,11 +127,11 @@ export class DocumentListDisplay extends PureComponent<Props> {
     renderItem = (item) => {
         return <TouchableOpacity onPress={this.onItemSelect} style={styles.documentContainer}>
             <View style={styles.itemRow1}>
-                <MediumText style={styles.itemTitle} text={item.title}/>
-                <MediumText style={styles.itemSecondarytext} text={'>'}/>
+                <MediumText style={styles.itemTitle} text={item.document_name}/>
+                <Image tintColor={Colors.bodySecondaryLight} style={styles.arrowImage} source={Images.arrowImg}/>
             </View>
             <View style={styles.itemRow2}>
-                <SmallText style={styles.itemSecondarytext} text={'Modified: 09/04/2018'}/>
+                <SmallText style={styles.itemSecondarytext} text={`Modified: ${item.modified}`}/>
             </View>
         </TouchableOpacity>
     }
@@ -73,6 +142,13 @@ export class DocumentListDisplay extends PureComponent<Props> {
 
     renderHeader = () => {
         return <View style={styles.listHeader}/>
+    }
+
+    renderFooter = (loading) => {
+        if(loading) {
+            return <LoadingIndicatorComp style={styles.footer}/>
+        }
+        return null
     }
 
     render() {
@@ -94,20 +170,34 @@ export class DocumentListDisplay extends PureComponent<Props> {
             }
             <FlatList
                 style={StyleSheet.flatten([styles.listcontainer, this.props.style])}
-                renderItem={({item, index}) => this.renderItem(item,index)}
+                renderItem={({item, index}) => this.renderItem(item)}
                 ItemSeparatorComponent={this.renderSeperator}
                 ListHeaderComponent={this.renderHeader}
-                data={documentData}
-                keyExtractor={(item, index) => item.title}
+                ListFooterComponent={() => this.renderFooter(this.state.loading)}
+                data={this.props.documents}
+                keyExtractor={(item, index) => item.id + item.document_name}
+                onEndReached={this.onLoadMore}
+                onEndThreshold={0}
             />
             <Footer/>
         </View>
     }
 }
 
-DocumentListDisplay.defaultProps = {
-    style: undefined
+function mapStateToProps(state) {
+    return {
+        filters: state.filters,
+        pageNo: state.documentList.pageNo,
+        totalPages: state.documentList.totalPages,
+        documents: state.documentList.documents,
+    }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentListDisplay)
 
 const styles = StyleSheet.create({
     container: {
@@ -163,5 +253,14 @@ const styles = StyleSheet.create({
         paddingRight: 20,
         paddingTop: 20,
         paddingBottom: 10
+    },
+    arrowImage: {
+        width: 15,
+        height: 15
+    },
+    footer: {
+        alignSelf: 'stretch',
+        height: ScalePerctFullHeight(15),
+
     }
 })

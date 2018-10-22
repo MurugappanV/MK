@@ -16,5 +16,6 @@ export function logout() {
     return (dispatch, getState) => {
         dispatch({type: Types.general.CLEAR_USER_NAME});
         dispatch({type: Types.default.CLEAR_DEFAULT});
+        dispatch({type: Types.filter.CLEAR_FILTER});
     }
 }

@@ -9,6 +9,11 @@ const SET_DEFAULT_PLATFORM = 'SET_DEFAULT_PLATFORM';
 const CLEAR_DEFAULT = 'CLEAR_DEFAULT';
 const APPLY_FILTER = 'APPLY_FILTER';
 const SET_FILTER_PLATFORM = 'SET_FILTER_PLATFORM';
+const CLEAR_FILTER = 'CLEAR_FILTER';
+const SET_DOC_LIST = 'SET_DOC_LIST';
+const CLEAR_DOC_LIST ='CLEAR_DOC_LIST';
+const SET_DOC_DATA = 'SET_DOC_DATA';
+const CLEAR_DOC_DATA = 'CLEAR_DOC_DATA';
 
 export const Types = {
     exception: {
@@ -30,6 +35,15 @@ export const Types = {
     },
     filter: {
         APPLY_FILTER,
-        SET_FILTER_PLATFORM
-    }
+        SET_FILTER_PLATFORM,
+        CLEAR_FILTER
+    },
+    documentList: {
+        SET_DOC_LIST,
+        CLEAR_DOC_LIST
+    },
+    document: {
+        SET_DOC_DATA,
+        CLEAR_DOC_DATA
+    }   
 }

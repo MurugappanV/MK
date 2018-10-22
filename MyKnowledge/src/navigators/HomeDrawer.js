@@ -16,7 +16,8 @@ type Props = {
   style?: number | Object | Array<number>,
   userName: string,
   navigation: any,
-  screenProps: any
+  screenProps: any,
+  logout: Function
 }
 
 class HomeDrawer extends PureComponent<Props> {

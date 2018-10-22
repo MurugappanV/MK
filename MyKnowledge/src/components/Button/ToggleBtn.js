@@ -17,8 +17,18 @@ type Props = {
     height: number
 }
 
-export class ToggleBtn extends PureComponent<Props> {
-    constructor(props) {
+type State = {
+    on: boolean,
+}
+
+export class ToggleBtn extends PureComponent<Props, State> {
+    static defaultProps = {
+        style: undefined
+    }
+
+    animValue: Animated = null
+
+    constructor(props: Props) {
         super(props)
         this.state = {on: true}
         this.animValue = new Animated.Value(1)
@@ -30,7 +40,7 @@ export class ToggleBtn extends PureComponent<Props> {
         this.props.onPress(!this.state.on)
     }
 
-    toggle = (on) => {
+    toggle = (on: boolean) => {
         const val = on ? 1 : 0
         Animated.timing(
             this.animValue,
@@ -64,10 +74,6 @@ export class ToggleBtn extends PureComponent<Props> {
             </Animated.View>
         </TouchableOpacity>
     }
-}
-
-ToggleBtn.defaultProps = {
-    style: undefined
 }
 
 const styles = StyleSheet.create({

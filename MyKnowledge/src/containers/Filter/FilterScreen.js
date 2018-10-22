@@ -7,8 +7,8 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
-import { StyleSheet, Modal, TouchableOpacity, View } from 'react-native'
-import { Colors, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
+import { StyleSheet, Modal, TouchableOpacity, View, Image } from 'react-native'
+import { Colors, Images, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
 import { Line, Footer, Button, StatusBarComp, MediumText, SmallText, SelectMultiple, RadioGroup } from '../../components'
 import { Header } from '../Header';
 import { FilterPopUp } from './FilterPopUp';
@@ -119,7 +119,7 @@ class FilterScreen extends PureComponent<Props, State> {
         return <TouchableOpacity style={styles.filter} onPress={() => this.onFilterSelect(label)}>
             <MediumText style={styles.label} text={label}/>
             <SmallText textProps={{ellipsizeMode: 'tail', numberOfLines: 1}} style={styles.filterValues} text={filterValues}/>
-            <MediumText style={styles.filterIcon} text={'>'}/>
+            <Image tintColor={Colors.bodySecondaryLight} style={styles.arrowImage} source={Images.arrowImg}/>
         </TouchableOpacity>
     }
 
@@ -296,6 +296,12 @@ const styles = StyleSheet.create({
         color: Colors.bodySecondaryLight
     },
     filterIcon: {
+        marginLeft: 10
+    },
+    arrowImage: {
+        width: 15,
+        height: 15,
+        alignSelf: 'center',
         marginLeft: 10
     }
 })

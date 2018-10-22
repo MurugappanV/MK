@@ -13,12 +13,12 @@ export const DrawerData = [
     {
       title: 'Document Types', 
       data: [
-        {routeName: 'DocumentList', title: 'All', img: Images.allImg}, 
-        {routeName: 'DocumentList', title: 'Newsletters', img: Images.fileImg},
-        {routeName: 'DocumentList', title: 'Service Documents', img: Images.bookImg},
-        {routeName: 'DocumentList', title: 'Videos', img: Images.videoImg},
-        {routeName: 'DocumentList', title: 'Trainings', img: Images.trainingImg},
-        {routeName: 'DocumentList', title: 'Communications', img: Images.bellImg}
+        {routeName: 'All', title: 'All', img: Images.allImg}, 
+        {routeName: 'Newsletters', title: 'Newsletters', img: Images.fileImg},
+        {routeName: 'Service', title: 'Service Documents', img: Images.bookImg},
+        {routeName: 'Videos', title: 'Videos', img: Images.videoImg},
+        {routeName: 'Trainings', title: 'Trainings', img: Images.trainingImg},
+        {routeName: 'Communications', title: 'Communications', img: Images.bellImg}
       ]
     },
     {

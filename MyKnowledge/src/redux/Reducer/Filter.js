@@ -22,4 +22,7 @@ export const filters = createReducer(initialState, {
             series: state.platformId == action.data.platform ? state.series : [], 
         }
     },
+    [Types.filter.CLEAR_FILTER](state, action) {
+        return initialState
+    },
 });

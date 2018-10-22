@@ -11,6 +11,7 @@ import {  DocumentListContainer, DocumentDisplayContainer, FilterContainer } fro
 type Props = {
     navigation: any
 };
+
 export class DocumentNavigator extends PureComponent<Props> {
     render() {
         return <Stack screenProps={{ rootNavigation: this.props.navigation }}/>;
