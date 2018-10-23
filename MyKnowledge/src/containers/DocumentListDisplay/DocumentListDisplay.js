@@ -11,7 +11,7 @@ import { StyleSheet, FlatList, View, TouchableOpacity, Image } from 'react-nativ
 import { Colors, Images, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
 import { LoadingIndicatorComp, Line, Footer, StatusBarComp, MediumText, SmallText, SearchInput } from '../../components'
 import { Header } from '../Header';
-import { DocumentApi } from '../../service';
+import { DocumentsApi } from '../../service';
 import { Actions } from '../../redux'
 
 const documentData = [
@@ -81,7 +81,7 @@ class DocumentListDisplay extends PureComponent<Props, State> {
 
     fetchDocuments = (pageNo: number, platform: number, series: Array<String>, accessories: Array<number>) => {
         this.setState({loading: true})
-        DocumentApi(pageNo, platform, series, accessories, this.onDocumentFetched, this.onDocumentFetchFailure)
+        DocumentsApi(pageNo, platform, series, accessories, this.onDocumentFetched, this.onDocumentFetchFailure)
     }
 
     onLoadMore = () => {
@@ -104,8 +104,9 @@ class DocumentListDisplay extends PureComponent<Props, State> {
         
     }
 
-    onItemSelect = () => {
-        this.props.navigation.navigate("Details")
+    onItemSelect = (id) => {
+        console.log('documentId -- ', id)
+        this.props.navigation.navigate("Details", {documentId: id})
     }
 
     onSearchOpen = () => {
@@ -125,7 +126,7 @@ class DocumentListDisplay extends PureComponent<Props, State> {
     }
 
     renderItem = (item) => {
-        return <TouchableOpacity onPress={this.onItemSelect} style={styles.documentContainer}>
+        return <TouchableOpacity onPress={() => this.onItemSelect(item.id)} style={styles.documentContainer}>
             <View style={styles.itemRow1}>
                 <MediumText style={styles.itemTitle} text={item.document_name}/>
                 <Image tintColor={Colors.bodySecondaryLight} style={styles.arrowImage} source={Images.arrowImg}/>

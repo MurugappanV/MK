@@ -1,10 +1,10 @@
 import { BaseAxiosInstance } from "../axios";
 
-export const SettingsApi = (success, failure) => {
-    let url = `filters`
+export const DocumentApi = (documentId, success, failure) => {
+    let url = `documents/${documentId}`
     BaseAxiosInstance.get(url)
     .then(function (response) {
-        console.log("settings response", response);
+        console.log(response);
         if(response.data.result_status == 1) {
             success(response.data.result_data)
         } else {
@@ -12,8 +12,7 @@ export const SettingsApi = (success, failure) => {
         }
     })
     .catch(function (error) {
-        console.log("settings error", error);
+        console.log(error);
         failure(error)
     });
 }
-

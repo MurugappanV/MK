@@ -1,6 +1,6 @@
 import { BaseAxiosInstance } from "../axios";
 
-export const DocumentApi = (pageNo, platform, series, accessories, success, failure) => {
+export const DocumentsApi = (pageNo, platform, series, accessories, success, failure) => {
     let url = `filter_documents_list?page=${pageNo}&per_page=20`
     BaseAxiosInstance.post(url, uploadContent(platform, series, accessories))
     .then(function (response) {
@@ -8,7 +8,7 @@ export const DocumentApi = (pageNo, platform, series, accessories, success, fail
         if(response.data.result_status == 1) {
             success(response.data.result_data)
         } else {
-            failure(error)
+            failure(response)
         }
     })
     .catch(function (error) {

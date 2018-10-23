@@ -1,1 +1,1 @@
-export { DocumentDisplay } from "./DocumentDisplay";
+export { default as DocumentDisplay } from "./DocumentDisplay";

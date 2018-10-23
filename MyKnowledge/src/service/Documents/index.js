@@ -1,1 +1,1 @@
-export { DocumentApi } from './Documents'
+export { DocumentsApi } from './Documents'

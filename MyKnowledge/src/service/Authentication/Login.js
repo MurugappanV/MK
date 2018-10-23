@@ -9,7 +9,7 @@ export const LoginApi = (login, password, success, failure) => {
         if(response.data.result_status == 1) {
             success(manipulateLoginResponse(response))
         } else {
-            failure(error)
+            failure(response)
         }
     })
     .catch(function (error) {

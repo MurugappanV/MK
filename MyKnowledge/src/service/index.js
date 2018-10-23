@@ -1,4 +1,5 @@
 export { SettingsApi } from './Startup'
 export { LoginApi } from './Authentication'
-export { DocumentApi } from './Documents'
+export { DocumentsApi } from './Documents'
+export { DocumentApi } from './Document'
 export { BaseAxiosInstance, setCookie } from './axios'

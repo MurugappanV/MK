@@ -7,11 +7,11 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
-import { StyleSheet, Modal, TouchableOpacity, View, Image } from 'react-native'
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native'
 import { Colors, Images, Metrics, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
-import { Line, Footer, Button, StatusBarComp, MediumText, SmallText, SelectMultiple, RadioGroup } from '../../components'
+import { Line, Footer, Button, StatusBarComp, MediumText, SmallText, SelectMultiple, RadioGroup, Modal } from '../../components'
 import { Header } from '../Header';
-import { FilterPopUp } from './FilterPopUp';
+// import { FilterPopUp } from './FilterPopUp';
 import { Actions } from '../../redux'
 
 type Props = {
@@ -188,9 +188,11 @@ class FilterScreen extends PureComponent<Props, State> {
     }
 
     renderFilterPopUp = (modalVisible: Boolean) => {
-        return <FilterPopUp 
+        return <Modal 
             visible={modalVisible}
-            onApply={this.onFilterClose}
+            onDone={this.onFilterClose}
+            onClose={this.onFilterClose}
+            btnText={'Apply'}
             renderItem={this.renderFilterItems}
             extraData={{
                 selectedPlatform: this.state.selectedPlatform,

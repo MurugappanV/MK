@@ -5,45 +5,145 @@
  * @flow
  */
 import React, {PureComponent} from 'react';
-import { StyleSheet, View } from 'react-native'
+import {connect} from 'react-redux';
+import { bindActionCreators } from "redux";
+import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { Colors, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
-import { Footer, StatusBarComp, ExtraLargeText, MediumText, Line  } from '../../components'
+import { Modal, LoadingIndicatorComp, Footer, StatusBarComp, ExtraLargeText, MediumText, Line, ScrollPicker } from '../../components'
 import { Header } from '../Header';
+import { DocumentApi } from '../../service';
+import { Actions } from '../../redux'
+import { PlatformDisplay } from './PlatformDisplay';
 
 
 type Props = {
     style?: number | Object | Array<number>
 }
 
-export class DocumentDisplay extends PureComponent<Props> {
-    constructor(props) {
-        super(props)
-        this.state = {}
+type State = {
+    modalVisible: Boolean
+}
+
+class DocumentDisplay extends PureComponent<Props, State> {
+    static defaultProps = {
+        style: undefined
     }
 
-    renderContent = () => {
-        return <View style={styles.contentContainer}>
-            <ExtraLargeText style={styles.title} text={"File Details"}/>
-            <MediumText style={styles.subTitle} text={"Title"}/>
-            <MediumText style={styles.subTitle} text={"xxxx xxxxxxx xxxxxxxxxxx xxxxxx xxxxxxx xxxx xx xxxxxx xxxxxx xxxxxxxxx.pdf"}/>
+    constructor(props) {
+        super(props)
+        const documentId = props.navigation.getParam("documentId", null);
+        console.log('documentId out -- ', documentId)
+        console.log('documentId out2 -- ', props.navigation)
+        if(documentId == null) {
+            props.navigation.goBack()
+        } else {
+            if(props.document == null || props.document.id != documentId) {
+                props.clearDocumentData()
+                this.fetchDocument(documentId)
+            }
+        }
+        this.state = {modalVisible: false}
+    }
+
+    fetchDocument = (id) => {
+        DocumentApi(id, this.onDocumentFetched, this.onDocumentFetchFailure)
+    }
+
+    onDocumentFetched = (response) => {
+        this.props.setDocumentData(response)
+    }
+
+    onDocumentFetchFailure = (error) => {
+
+    }
+
+    onPlatformOpen = () => {
+        this.setState({modalVisible: true})
+    }
+
+    onPlatformClose = () => {
+        this.setState({modalVisible: false})
+    }
+
+    renderPlatformItems = () => {
+        return this.props.document && <PlatformDisplay platform_info={this.props.document.platform_info}/>
+    }
+
+    renderPlatforms = (modalVisible: Boolean) => {
+        return <Modal 
+            style={{height: 350}}
+            visible={modalVisible}
+            onDone={this.onPlatformClose}
+            onClose={this.onPlatformClose}
+            btnText={'OK'}
+            renderItem={this.renderPlatformItems}
+        />
+    }
+
+    renderSubContent = (key, value) => {
+        return <View>
             <Line style={styles.seperator}/>
-            <MediumText style={styles.subtileTitle} text={"Platform Det"}/>
+            <View style={styles.subcontentView}>
+                <MediumText style={styles.subTitle} text={key}/>
+                {value != "--" && <MediumText style={styles.subTitle} text={value}/>}
+            </View>
         </View>
     }
 
+    renderContent = (document) => {
+        const {document_name, document_type, summary, size, accessories, language, modified, file_format} = document
+        return <View style={styles.contentContainer}>
+            <ExtraLargeText style={styles.title} text={"File Details"}/>
+            <MediumText style={styles.subTitle} text={"Title"}/>
+            <MediumText style={styles.subTitle} text={`${document_name}${file_format && `.${file_format.substring(file_format.indexOf('/')+1)}`}`}/>
+            <Line style={styles.seperator}/>
+            <TouchableOpacity onPress={this.onPlatformOpen}>
+                <MediumText style={styles.subtileTitle} text={"Platform Det"}/>
+            </TouchableOpacity>
+            {this.renderSubContent("Type", document_type)}
+            {this.renderSubContent("Accessories", accessories)}
+            {this.renderSubContent("Language", language)}
+            {this.renderSubContent("Modified", modified)}
+            {this.renderSubContent("Size", size == "--" ? size : `${size} MB`)}
+            {this.renderSubContent("Summary", summary)}
+        </View>
+    }
+
+    renderView = () => {
+        const { document } = this.props
+        console.log('document - ', document)
+        if(document != null) {
+            console.log('document - in ')
+            return this.renderContent(document)
+        } else {
+            return <LoadingIndicatorComp style={{flex: 1}}/>
+        }
+    }
+
     render() {
+        const {modalVisible} = this.state
         return <View style={styles.container}>
             <StatusBarComp/>
+            {this.renderPlatforms(modalVisible)}
             <Header navigation={this.props.screenProps.rootNavigation}/>
-            {this.renderContent()}
+            {this.renderView()}
             <Footer/>
         </View>
     }
 }
 
-DocumentDisplay.defaultProps = {
-    style: undefined
+function mapStateToProps(state) {
+    return {
+        document: state.document,
+    }
 }
+
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DocumentDisplay)
+
 
 const styles = StyleSheet.create({
     container: {
@@ -73,5 +173,9 @@ const styles = StyleSheet.create({
     subtileTitle: {
         textAlign: 'left',
         color: Colors.bodySecondaryLight
+    },
+    subcontentView: {
+        flexDirection: "row",
+        justifyContent: 'space-between'
     }
 })

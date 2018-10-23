@@ -1,7 +1,7 @@
 import {Types} from '../Types';
 import createReducer from './CreateReducer';
 
-const initialState = {}
+const initialState = null
 
 export const document = createReducer(initialState, {
     [Types.document.SET_DOC_DATA](state, action) {
