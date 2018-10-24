@@ -1,8 +1,8 @@
 import { BaseAxiosInstance } from "../axios";
 
-export const DocumentsApi = (pageNo, platform, series, accessories, success, failure) => {
+export const DocumentsApi = (pageNo, platform, series, accessories, dataType, success, failure) => {
     let url = `filter_documents_list?page=${pageNo}&per_page=20`
-    BaseAxiosInstance.post(url, uploadContent(platform, series, accessories))
+    BaseAxiosInstance.post(url, uploadContent(platform, series, accessories, dataType))
     .then(function (response) {
         console.log(response);
         if(response.data.result_status == 1) {
@@ -17,11 +17,12 @@ export const DocumentsApi = (pageNo, platform, series, accessories, success, fai
     });
 }
 
-uploadContent = (platform, series, accessories) => {
+uploadContent = (platform, series, accessories, dataType) => {
     return {
         "platform_id": platform,
         "series": series,
         "accessories": accessories,
-        "languages": 2
+        "languages": null,
+        "document_type_id": dataType
     }
 }

@@ -14,6 +14,8 @@ const SET_DOC_LIST = 'SET_DOC_LIST';
 const CLEAR_DOC_LIST ='CLEAR_DOC_LIST';
 const SET_DOC_DATA = 'SET_DOC_DATA';
 const CLEAR_DOC_DATA = 'CLEAR_DOC_DATA';
+const SET_DATA_TYPE = 'SET_DATA_TYPE';
+const CLEAR_DATA_TYPE = 'CLEAR_DATA_TYPE';
 
 export const Types = {
     exception: {
@@ -36,6 +38,8 @@ export const Types = {
     filter: {
         APPLY_FILTER,
         SET_FILTER_PLATFORM,
+        SET_DATA_TYPE,
+        CLEAR_DATA_TYPE,
         CLEAR_FILTER
     },
     documentList: {

@@ -31,12 +31,17 @@ class AuthLoading extends PureComponent<Props> {
                 setCookie(authToken)
                 getUserName().then(name => {
                     props.setUserName(name)
+                }).catch(error => {
+                    console.log(error)
                 })
-                getDefaultPlatform().then(platformId => {
-                    platformId = !!platformId ? platformId : 1
-                    props.setDefaultPlatform(platformId)
-                    this.props.navigation.navigate("Home")
+                getDefaultPlatform().then(platform => {
+                    const platformId = !!platfrom ? platfrom.split('-')[0] : 1
+                    const platformName = !!platfrom ? platfrom.split('-')[1] : 'HP PageWide XL'
+                    props.setDefaultPlatform(platformId, platformName)
+                }).catch(error => {
+                    console.log(error)
                 })
+                this.props.navigation.navigate("Home")
             } else {
                 this.props.navigation.navigate("Auth")
             }

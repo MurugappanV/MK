@@ -70,8 +70,8 @@ class FilterScreen extends PureComponent<Props, State> {
     }
 
     onApply = () => {
-        const {selectedPlatform, selectedSeries, selectedAccessories} = this.state
-        this.props.setFilters(selectedPlatform, selectedSeries, selectedAccessories)
+        const {selectedPlatform, selectedPlatformName, selectedSeries, selectedAccessories} = this.state
+        this.props.setFilters(selectedPlatform, selectedPlatformName, selectedSeries, selectedAccessories)
         this.props.navigation.goBack()
     }
 
@@ -207,7 +207,10 @@ class FilterScreen extends PureComponent<Props, State> {
         return <View style={styles.container}>
             <StatusBarComp/>
             {this.renderFilterPopUp(modalVisible)}
-            <Header navigation={this.props.screenProps.rootNavigation}/>
+            <Header 
+                title={`${this.props.filters.platformName} - ${this.props.screenProps.title}`} 
+                navigation={this.props.screenProps.rootNavigation}
+            />
             <View style={StyleSheet.flatten([styles.innerContainer, this.props.style])}>
                 {this.renderFilter(Platform)}
                 <Line style={styles.line}/>

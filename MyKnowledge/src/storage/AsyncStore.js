@@ -17,8 +17,8 @@ export function getUserName() {
     return AsyncStorage.getItem('userName')
 }
 
-export function setDefaultPlatform(platformId) {
-    AsyncStorage.setItem('platformId', platformId);
+export function setDefaultPlatform(platformId, platformName) {
+    AsyncStorage.setItem('platformId', `${platformId}-${platformName}`);
 }
 
 export function getDefaultPlatform() {

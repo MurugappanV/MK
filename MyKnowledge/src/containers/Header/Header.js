@@ -26,7 +26,7 @@ export class Header extends PureComponent<Props> {
         return <View style={StyleSheet.flatten([styles.container, this.props.style])}>
             <ImageBtn style={styles.menuImage} imgStyle={styles.menuImage} source={Images.menuImg} onPress={this.props.navigation.toggleDrawer}/>
             {/* <Image style={styles.menuImage} source={Images.logoImg}/> */}
-            <LargeText style={styles.title} text={this.props.title}/>
+            <LargeText textProps={{numberOfLines: 1, ellipsizeMode: 'tail'}} style={styles.title} text={this.props.title}/>
             {this.props.onSearchSelected && <ImageBtn style={styles.menuImage} imgStyle={styles.menuImage} source={Images.searchImg} onPress={this.props.onSearchSelected}/>}
             {this.props.onFilterSelected && <ImageBtn style={styles.filter} imgStyle={styles.filterImage} source={Images.filterImg} onPress={this.props.onFilterSelected}/>}
         </View>
@@ -64,5 +64,7 @@ const styles = StyleSheet.create({
     title: {
         color: Colors.bodyPrimaryLight,
         flex: 1,
+        marginLeft: 10,
+        marginRight: 10
     }
 })

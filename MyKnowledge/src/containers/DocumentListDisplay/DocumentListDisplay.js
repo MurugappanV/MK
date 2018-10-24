@@ -33,14 +33,18 @@ type Props = {
     style?: number | Object | Array<number>,
     navigation: any,
     screenProps: any,
-    setDocumentList: Function
+    setDocumentList: Function,
+    setFilterDataType: Function,
+    documents: any,
+    filters: any
 }
 
 type State = {
     searchSelected: Boolean,
     seachKey: String,
     pageNo: Number,
-    loading: boolean
+    loading: boolean,
+    filters: any
 }
 
 class DocumentListDisplay extends PureComponent<Props, State> {
@@ -51,6 +55,7 @@ class DocumentListDisplay extends PureComponent<Props, State> {
     constructor(props: Props) {
         super(props)
         this.state = {searchSelected: false, seachKey: "", loading: false, filters: {}}
+        props.setFilterDataType(props.screenProps.title)
     }
 
     static getDerivedStateFromProps(props, state) {
@@ -74,14 +79,14 @@ class DocumentListDisplay extends PureComponent<Props, State> {
 
     componentDidUpdate(prevProps, prevState) {
         if(prevProps.filters != this.state.filters) {
-            const {platformId, series, accessories} = this.state.filters
-            this.fetchDocuments(1, platformId, series, accessories)
+            const {platformId, series, accessories, dataType} = this.state.filters
+            this.fetchDocuments(1, platformId, series, accessories, dataType)
         }
     }
 
-    fetchDocuments = (pageNo: number, platform: number, series: Array<String>, accessories: Array<number>) => {
+    fetchDocuments = (pageNo: number, platform: number, series: Array<String>, accessories: Array<number>, dataType: Array<number>) => {
         this.setState({loading: true})
-        DocumentsApi(pageNo, platform, series, accessories, this.onDocumentFetched, this.onDocumentFetchFailure)
+        DocumentsApi(pageNo, platform, series, accessories, dataType, this.onDocumentFetched, this.onDocumentFetchFailure)
     }
 
     onLoadMore = () => {
@@ -155,7 +160,8 @@ class DocumentListDisplay extends PureComponent<Props, State> {
     render() {
         return <View style={styles.container}>
             <StatusBarComp/>
-            <Header 
+            <Header
+                title={`${this.props.filters.platformName} - ${this.props.screenProps.title}`}
                 navigation={this.props.screenProps.rootNavigation} 
                 onSearchSelected={this.onSearchOpen}
                 onFilterSelected={this.onFilterOpen}

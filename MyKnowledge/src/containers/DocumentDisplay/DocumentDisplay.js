@@ -7,8 +7,8 @@
 import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
-import { StyleSheet, TouchableOpacity, View } from 'react-native'
-import { Colors, ScalePerctFullHeight, ScalePerctFullWidth} from '../../asset'
+import { StyleSheet, TouchableOpacity, View, Image } from 'react-native'
+import { Colors, ScalePerctFullHeight, ScalePerctFullWidth, Images} from '../../asset'
 import { Modal, LoadingIndicatorComp, Footer, StatusBarComp, ExtraLargeText, MediumText, Line, ScrollPicker } from '../../components'
 import { Header } from '../Header';
 import { DocumentApi } from '../../service';
@@ -17,7 +17,9 @@ import { PlatformDisplay } from './PlatformDisplay';
 
 
 type Props = {
-    style?: number | Object | Array<number>
+    style?: number | Object | Array<number>,
+    filters: any,
+    screenProps: any
 }
 
 type State = {
@@ -32,6 +34,7 @@ class DocumentDisplay extends PureComponent<Props, State> {
     constructor(props) {
         super(props)
         const documentId = props.navigation.getParam("documentId", null);
+        // const documentId = 30
         console.log('documentId out -- ', documentId)
         console.log('documentId out2 -- ', props.navigation)
         if(documentId == null) {
@@ -91,11 +94,11 @@ class DocumentDisplay extends PureComponent<Props, State> {
     }
 
     renderContent = (document) => {
-        const {document_name, document_type, summary, size, accessories, language, modified, file_format} = document
+        const {document_name, document_type, summary, uploaded, size, accessories, language, modified, file_format} = document
         return <View style={styles.contentContainer}>
             <ExtraLargeText style={styles.title} text={"File Details"}/>
             <MediumText style={styles.subTitle} text={"Title"}/>
-            <MediumText style={styles.subTitle} text={`${document_name}${file_format && `.${file_format.substring(file_format.indexOf('/')+1)}`}`}/>
+            <MediumText style={styles.subTitle} text={`${document_name}${!!file_format && file_format.indexOf('/') != -1 ? `.${file_format.substring(file_format.indexOf('/')+1)}` : ``}`}/>
             <Line style={styles.seperator}/>
             <TouchableOpacity onPress={this.onPlatformOpen}>
                 <MediumText style={styles.subtileTitle} text={"Platform Det"}/>
@@ -106,6 +109,11 @@ class DocumentDisplay extends PureComponent<Props, State> {
             {this.renderSubContent("Modified", modified)}
             {this.renderSubContent("Size", size == "--" ? size : `${size} MB`)}
             {this.renderSubContent("Summary", summary)}
+            <Line style={styles.seperatorBlue}/>
+            {uploaded && <TouchableOpacity onPress={this.onPlatformOpen}>
+                <Image tintColor={Colors.bodyPrimaryVarient} style={styles.downloadImage} source={Images.downloadImg}/>
+                <MediumText style={styles.downloadText} text={'Download'}/>
+            </TouchableOpacity>}
         </View>
     }
 
@@ -125,7 +133,10 @@ class DocumentDisplay extends PureComponent<Props, State> {
         return <View style={styles.container}>
             <StatusBarComp/>
             {this.renderPlatforms(modalVisible)}
-            <Header navigation={this.props.screenProps.rootNavigation}/>
+            <Header 
+                title={`${this.props.filters.platformName} - ${this.props.screenProps.title}`} 
+                navigation={this.props.screenProps.rootNavigation}
+            />
             {this.renderView()}
             <Footer/>
         </View>
@@ -134,6 +145,7 @@ class DocumentDisplay extends PureComponent<Props, State> {
 
 function mapStateToProps(state) {
     return {
+        filters: state.filters,
         document: state.document,
     }
 }
@@ -170,6 +182,12 @@ const styles = StyleSheet.create({
         marginTop: 6,
         marginBottom: 6
     },
+    seperatorBlue: {
+        borderBottomWidth: 0.5,
+        marginTop: 30,
+        marginBottom: 20,
+        borderBottomColor: Colors.bodyPrimaryVarient
+    },
     subtileTitle: {
         textAlign: 'left',
         color: Colors.bodySecondaryLight
@@ -177,5 +195,13 @@ const styles = StyleSheet.create({
     subcontentView: {
         flexDirection: "row",
         justifyContent: 'space-between'
+    },
+    downloadImage: {
+        width: 50,
+        height: 50,
+        alignSelf: 'center'
+    },
+    downloadText: {
+        color: Colors.bodyPrimaryVarient
     }
 })

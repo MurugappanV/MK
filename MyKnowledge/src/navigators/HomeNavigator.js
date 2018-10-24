@@ -14,7 +14,7 @@ import {  LoginContainer,
 	DefaultSettingsContainer,
 	DocumentListContainer } from '../containers'
 import HomeDrawer from './HomeDrawer';
-import { ScalePerctFullWidth } from '../asset';
+import { ScalePerctFullWidth, DataTypes } from '../asset';
 import { DocumentNavigator } from './DocumentNavigator';
 import { SettingsApi } from '../service'
 import { Actions } from '../redux'
@@ -71,22 +71,22 @@ const Home = createDrawerNavigator({
       screen: NotifySettingsContainer
     },
     All: {
-      screen: props => <DocumentNavigator {...props} title="All"/>
+      screen: props => <DocumentNavigator {...props} title={DataTypes.All}/>
     },
     Newsletters: {
-      screen: props => <DocumentNavigator {...props} title="Newsletters"/>
+      screen: props => <DocumentNavigator {...props} title={DataTypes.Newsletters}/>
     },
     Service: {
-      screen: props => <DocumentNavigator {...props} title="Service"/>
+      screen: props => <DocumentNavigator {...props} title={DataTypes.Service}/>
     },
     Videos: {
-      screen: props => <DocumentNavigator {...props} title="Videos"/>
+      screen: props => <DocumentNavigator {...props} title={DataTypes.Videos}/>
     },
     Trainings: {
-      screen: props => <DocumentNavigator {...props} title="Trainings"/>
+      screen: props => <DocumentNavigator {...props} title={DataTypes.Trainings}/>
     },
     Communications: {
-      screen: props => <DocumentNavigator {...props} title="Communications"/>
+      screen: props => <DocumentNavigator {...props} title={DataTypes.Communications}/>
     }
     
   }, {

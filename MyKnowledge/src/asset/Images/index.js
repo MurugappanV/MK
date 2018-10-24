@@ -30,4 +30,6 @@ export const Images = {
     checkSelectImg: require("./icon-checkbox-checked.png"),
     checkBoxImg: require("./icon-checkbox.png"),
     arrowImg: require("./arrow.png"),
+    exclamationImg: require("./exclamation.png"),
+    downloadImg: require("./download.png"),
 };

@@ -3,14 +3,17 @@ import createReducer from './CreateReducer';
 
 const initialState = {
     platformId: 1,
+    platformName: "HP PageWide XL",
     series: [],
-    accessories: []
+    accessories: [],
+    dataType: []
 }
 
 export const filters = createReducer(initialState, {
     [Types.filter.APPLY_FILTER](state, action) {
         return {
             platformId: action.data.platform, 
+            platformName: action.data.platformName, 
             series: action.data.series, 
             accessories: action.data.accessories
         }
@@ -19,10 +22,29 @@ export const filters = createReducer(initialState, {
         return {
             ...state,
             platformId: action.data.platform, 
+            platformName: action.data.platformName,
             series: state.platformId == action.data.platform ? state.series : [], 
         }
     },
+    [Types.filter.SET_DATA_TYPE](state, action) {
+        return {
+            ...state,
+            dataType: action.data
+        }
+    },
+    [Types.filter.CLEAR_DATA_TYPE](state, action) {
+        return {
+            ...state,
+            dataType: []
+        }
+    },
     [Types.filter.CLEAR_FILTER](state, action) {
-        return initialState
+        return {
+            platformId: 1,
+            platformName: "HP PageWide XL",
+            series: [],
+            accessories: [],
+            dataType: state.dataType
+        }
     },
 });

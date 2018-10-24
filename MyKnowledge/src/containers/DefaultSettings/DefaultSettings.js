@@ -31,12 +31,13 @@ class DefaultSettings extends PureComponent<Props, State> {
 
     constructor(props: Props) {
         super(props)
-        this.state = {value: props.platformId}
+        this.state = {value: props.platformId, label: props.platformName}
     }
 
     onSave = () => {
-        setDefaultPlatform(this.state.value)
-        this.props.setDefaultPlatform(this.state.value)
+        this.props.setFilterPlatform(this.state.value, this.state.label)
+        setDefaultPlatform(this.state.value, this.state.label)
+        this.props.setDefaultPlatform(this.state.value, this.state.label)
         this.props.navigation.goBack()
     }
 
@@ -44,8 +45,8 @@ class DefaultSettings extends PureComponent<Props, State> {
         this.props.navigation.goBack()
     }
 
-    onRadioButtonSelect = (value: number) => {
-        this.setState({value: value})
+    onRadioButtonSelect = (value: number, label: String) => {
+        this.setState({value: value, label: label})
     }
 
     renderSaveBtn = () => {
@@ -106,7 +107,8 @@ class DefaultSettings extends PureComponent<Props, State> {
 function mapStateToProps(state) {
     return {
         platforms: state.settings.platforms,
-        platformId: state.defaultSettings.platformId
+        platformId: state.defaultSettings.platformId,
+        platformName: state.defaultSettings.platformName
     }
 }
 
