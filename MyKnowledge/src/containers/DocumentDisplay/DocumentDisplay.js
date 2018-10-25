@@ -8,8 +8,9 @@ import React, {PureComponent} from 'react';
 import {connect} from 'react-redux';
 import { bindActionCreators } from "redux";
 import { StyleSheet, TouchableOpacity, View, Image } from 'react-native'
+import RNFetchBlob from 'rn-fetch-blob'
 import { Colors, ScalePerctFullHeight, ScalePerctFullWidth, Images} from '../../asset'
-import { Modal, LoadingIndicatorComp, Footer, StatusBarComp, ExtraLargeText, MediumText, Line, ScrollPicker } from '../../components'
+import { Modal, ProgressLoadignComp, LoadingIndicatorComp, Footer, StatusBarComp, ExtraLargeText, MediumText, Line, ScrollPicker } from '../../components'
 import { Header } from '../Header';
 import { DocumentApi } from '../../service';
 import { Actions } from '../../redux'
@@ -23,7 +24,10 @@ type Props = {
 }
 
 type State = {
-    modalVisible: Boolean
+    modalVisible: boolean,
+    downloading: boolean, 
+    value: number, 
+    title: string
 }
 
 class DocumentDisplay extends PureComponent<Props, State> {
@@ -34,7 +38,7 @@ class DocumentDisplay extends PureComponent<Props, State> {
     constructor(props) {
         super(props)
         const documentId = props.navigation.getParam("documentId", null);
-        // const documentId = 30
+        // const documentId = 20
         console.log('documentId out -- ', documentId)
         console.log('documentId out2 -- ', props.navigation)
         if(documentId == null) {
@@ -45,7 +49,7 @@ class DocumentDisplay extends PureComponent<Props, State> {
                 this.fetchDocument(documentId)
             }
         }
-        this.state = {modalVisible: false}
+        this.state = {modalVisible: false, downloading: false, value: 0, title: ''}
     }
 
     fetchDocument = (id) => {
@@ -72,6 +76,40 @@ class DocumentDisplay extends PureComponent<Props, State> {
         return this.props.document && <PlatformDisplay platform_info={this.props.document.platform_info}/>
     }
 
+    onDownload = (title, file_format, download_link) => {
+        const android = RNFetchBlob.android
+        let dirs = RNFetchBlob.fs.dirs
+        console.log('dirs ', dirs.DocumentDir)
+        this.setState({downloading: true, value: 0, title: title})
+        RNFetchBlob.config({
+            path : dirs.DocumentDir + '/' + title
+        })
+        .fetch('GET', download_link)
+        .progress((received, total) => {
+            this.setState({value: received / total})
+            console.log('progress', received / total)
+        })
+        .then((res) => {
+            console.log('res ', res)
+            console.log('path ', res.path())
+            android.actionViewIntent(res.path(), file_format)
+            this.setState({downloading: false, value: 0, title: ''})
+        }).catch(error => {
+            console.log('fetch error ', error)
+            this.setState({downloading: false, value: 0, title: ''})
+        })
+        
+    }
+
+    // addAndroidDownloads : {
+    //     useDownloadManager : true,
+    //     title : title,
+    //     description : 'HP document',
+    //     mime : file_format,
+    //     mediaScannable : true,
+    //     notification : true,
+    //     },
+
     renderPlatforms = (modalVisible: Boolean) => {
         return <Modal 
             style={{height: 350}}
@@ -94,11 +132,12 @@ class DocumentDisplay extends PureComponent<Props, State> {
     }
 
     renderContent = (document) => {
-        const {document_name, document_type, summary, uploaded, size, accessories, language, modified, file_format} = document
+        const {document_name, download_link, document_type, summary, uploaded, size, accessories, language, modified, file_format} = document
+        const title = `${document_name}${!!file_format && file_format.indexOf('/') != -1 ? `.${file_format.substring(file_format.indexOf('/')+1)}` : ``}`
         return <View style={styles.contentContainer}>
             <ExtraLargeText style={styles.title} text={"File Details"}/>
             <MediumText style={styles.subTitle} text={"Title"}/>
-            <MediumText style={styles.subTitle} text={`${document_name}${!!file_format && file_format.indexOf('/') != -1 ? `.${file_format.substring(file_format.indexOf('/')+1)}` : ``}`}/>
+            <MediumText style={styles.subTitle} text={title}/>
             <Line style={styles.seperator}/>
             <TouchableOpacity onPress={this.onPlatformOpen}>
                 <MediumText style={styles.subtileTitle} text={"Platform Det"}/>
@@ -110,9 +149,9 @@ class DocumentDisplay extends PureComponent<Props, State> {
             {this.renderSubContent("Size", size == "--" ? size : `${size} MB`)}
             {this.renderSubContent("Summary", summary)}
             <Line style={styles.seperatorBlue}/>
-            {uploaded && <TouchableOpacity onPress={this.onPlatformOpen}>
+            {uploaded && <TouchableOpacity onPress={() => this.onDownload(title, file_format, download_link)}>
                 <Image tintColor={Colors.bodyPrimaryVarient} style={styles.downloadImage} source={Images.downloadImg}/>
-                <MediumText style={styles.downloadText} text={'Download'}/>
+                <MediumText text={'Download'}/>
             </TouchableOpacity>}
         </View>
     }
@@ -128,8 +167,22 @@ class DocumentDisplay extends PureComponent<Props, State> {
         }
     }
 
+    renderProgress = (value: number, description: string) => {
+        return <View style={styles.progressView}>
+            <ProgressLoadignComp 
+                title ={"Downloading file"}
+                description={description}
+                value={value}
+                style={styles.progress}
+            />
+        </View>
+    }
+    // style?: number | Object | Array<number>,
+    // titleStyle?: number | Object | Array<number>,
+    // descriptionStyle?: number | Object | Array<number>,
+
     render() {
-        const {modalVisible} = this.state
+        const {modalVisible, downloading, value, title} = this.state
         return <View style={styles.container}>
             <StatusBarComp/>
             {this.renderPlatforms(modalVisible)}
@@ -139,6 +192,7 @@ class DocumentDisplay extends PureComponent<Props, State> {
             />
             {this.renderView()}
             <Footer/>
+            {downloading && this.renderProgress(value, title)}
         </View>
     }
 }
@@ -203,5 +257,16 @@ const styles = StyleSheet.create({
     },
     downloadText: {
         color: Colors.bodyPrimaryVarient
+    },
+    progressView: {
+        position: 'absolute', 
+        width: ScalePerctFullWidth(100),
+        height: ScalePerctFullHeight(100),
+        justifyContent: 'center',
+        alignItems: 'center',
+        alignContent: 'center'
+    },
+    progress: {
     }
+
 })
