@@ -35,8 +35,8 @@ class AuthLoading extends PureComponent<Props> {
                     console.log(error)
                 })
                 getDefaultPlatform().then(platform => {
-                    const platformId = !!platfrom ? platfrom.split('-')[0] : 1
-                    const platformName = !!platfrom ? platfrom.split('-')[1] : 'HP PageWide XL'
+                    const platformId = !!platform ? platfrom.split('-')[0] : 1
+                    const platformName = !!platform ? platfrom.split('-')[1] : 'HP PageWide XL'
                     props.setDefaultPlatform(platformId, platformName)
                 }).catch(error => {
                     console.log(error)
